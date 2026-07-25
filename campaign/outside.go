@@ -7,8 +7,8 @@ package campaign
 // to be and a plausible reason to go in, per chapter" — and names the line it has to
 // walk: departures must be legible enough to feel like people going home and opaque
 // enough never to become a schedule. cast.go carries one fixed Activity per man, which
-// is the whole of what a campaign had to vary itself with, and sixteen chapters of it
-// reads as one chapter sixteen times.
+// is the whole of what a campaign had to vary itself with, and a campaign of it reads
+// as one chapter repeated.
 //
 // This is not a second property of a member. ADR 0009 fixes a member at one capability
 // and one cost of loss, and nothing here may rank anyone or be derived from either.

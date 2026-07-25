@@ -142,3 +142,42 @@ countdown.
 **Worth revisiting if.** Playtesting shows the middle of the campaign sags. The response is
 to cut chapters, not to add an act structure — the flatness is carrying an argument, and
 the length is the part that is tuning.
+
+## Tuning log
+
+**2026-07-25 — sixteen chapters cut to twelve; loss rate from one bip in four to one in
+three.** The decision is unchanged. Both numbers were offered above as a starting point
+and explicitly as tuning, and this is that tuning happening.
+
+The revisit condition fired, but not on the first reading. `cmd/roundhill` played through
+as flat the first time, and that reading was discarded as worthless: the harness had one
+fixed `Activity` line per member and no flare at all, so the roster and the Block — the
+two things this decision leaves the variation entirely to — had nothing to vary with. The
+monotony was the missing content, not the shape. It was the predicted symptom arriving for
+the wrong reason, which is the failure mode this log exists to record, because the obvious
+response would have been to cut the campaign on evidence that did not support it.
+
+With [ADR 0012](0012-scarcity-is-the-block-emptying.md)'s per-chapter ambient content and
+[ADR 0011](0011-the-last-bip-generates-the-next-flare.md)'s flares written, a full replay
+still went flat from around the tenth chapter. That is the same reading with the confound
+removed, and it is what twelve answers.
+
+Twelve is the shortest cut that clears where it sagged and stays above this decision's own
+floor — the count must exceed the roster of eight, or ADR 0007's empty set is unreachable.
+The loss rate moved with it and not independently, as the sharp edge above requires: twelve
+chapters at one in four would land a typical campaign three men down instead of four, and
+the diminished set the ending is written for would have quietly become a fuller one. At one
+in three, twenty auto-played campaigns averaged 4.4 losses against the target of half the
+roster, with no run losing nobody and none losing all eight — both extremes still tails.
+
+Twelve was then played through, and it held to the end. That is the first reading this
+decision has that is not a warning: the sequence stayed worth playing for a full campaign
+without an act, a mid-campaign turn, or a climax, which is the whole of what ADR 0008 and
+[ADR 0013](0013-escalation-plateaus.md) bet and neither could show until something was
+playable. The remedy the monotony risk called for turned out to be length and the missing
+content, in that order, and not the structure.
+
+The bet is not proven, only survived. It was survived in a text harness with no bike, no
+shooting and no encounter, by a player who knows the design — none of which is the game,
+and the last of which is the weakest part of the evidence. What the harness can no longer
+tell us is whether twelve is right; that question now needs the real thing.
