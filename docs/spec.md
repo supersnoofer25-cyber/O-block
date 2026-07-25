@@ -3,7 +3,7 @@
 - **Status:** Draft
 - **Date:** 2026-07-24
 - **Sources:** [`CONTEXT.md`](../CONTEXT.md) for vocabulary; ADRs
-  [0001](adr/0001-tactical-agency-strategic-futility.md)–[0009](adr/0009-behaviour-and-absence-never-a-number.md)
+  [0001](adr/0001-tactical-agency-strategic-futility.md)–[0010](adr/0010-the-beef-has-no-agreed-origin.md)
   for the reasoning behind every decision below.
 
 This document describes *what* the game is. It does not re-argue the decisions — where a
@@ -20,6 +20,16 @@ set**, **Orinda**. He is trying to protect them.
 
 He cannot. Every retaliation he wins produces the reason for the next one, and the set
 gets smaller. He is not told this, and the game never states it. He experiences it.
+
+**What started the beef is never resolved.** Incompatible accounts circulate — someone says
+it was a corner, someone says it was somebody's cousin, someone says it was always like
+this — and no scene, line, or flashback ever adjudicates. This is not a mystery with a
+hidden answer; there is no answer, and the accounts are written to contradict rather than
+to reconcile. ([ADR 0010](adr/0010-the-beef-has-no-agreed-origin.md))
+
+The player is therefore retaliating over something with no solid ground under it from the
+first hour, which is the premise above operating from the beginning rather than being
+revealed at the end.
 
 The player's skill is real throughout. What the player is wrong about is not whether their
 skill works, but what it accomplishes. They believe they are defending. They are
@@ -278,6 +288,8 @@ contradicts it.
 - **Stats, ratings, tiers, levels, classes and loadouts** on any set member; a cost of loss
   derived from a capability; a cost that deletes a location; a capability that exists in
   only one seat (ADR 0009)
+- **A canonical origin for the beef**, in any form; territory as a live stake; any scene,
+  line, or flashback that settles it; any character who knows (ADR 0010)
 - **Manual saves** (§7)
 - **Real people and real events** from O-Block (§2)
 
@@ -313,20 +325,17 @@ None of these threaten what is settled above. All need answers before production
 
 1. **Engine.** No engine chosen; no code exists. Deliberately deferred — the decisions
    above are engine-agnostic. Warrants its own ADR when taken.
-2. **What started the beef.** Undefined. Note that **beef** is defined as having no start
-   date every participant would name the same way — so this may be answered as
-   deliberately contested rather than as a fact.
-3. **How scarcity is expressed.** Narrowed by ADR 0008, not closed. The *unit* is settled —
+2. **How scarcity is expressed.** Narrowed by ADR 0008, not closed. The *unit* is settled —
    one chapter is one budget of time outside — and so is the fact that the budget running
    out, rather than a clock, is what sends the player. What that budget is made of in the
    fiction, and how a player perceives it running low without perceiving a timer, is still
    open. This is the remaining half of ADR 0005's hardest requirement.
-4. **How the beef flares.** What generates a reason to bip out. The other half of this
+3. **How the beef flares.** What generates a reason to bip out. The other half of this
    question — whether the player can decline indefinitely — is settled by ADR 0008: they
    cannot.
-5. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
+4. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
    fixes that it is monotonic and that winning still escalates. Its shape remains
    deliberately undecided.
-6. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
+5. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
    chapter count — ADR 0008 makes the two a single knob, since together they determine
    whether an empty set stays reachable and unlikely.
