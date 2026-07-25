@@ -3,7 +3,7 @@
 - **Status:** Draft
 - **Date:** 2026-07-24
 - **Sources:** [`CONTEXT.md`](../CONTEXT.md) for vocabulary; ADRs
-  [0001](adr/0001-tactical-agency-strategic-futility.md)–[0007](adr/0007-zero-is-an-ending-not-a-fail-state.md)
+  [0001](adr/0001-tactical-agency-strategic-futility.md)–[0008](adr/0008-flat-chapter-sequence.md)
   for the reasoning behind every decision below.
 
 This document describes *what* the game is. It does not re-argue the decisions — where a
@@ -63,6 +63,20 @@ constraint, not a preference.
 The loop's engine is that the last step supplies the motive for the next iteration. The
 player retaliates because of who they lost retaliating.
 
+**One turn of this loop is a chapter**, and the campaign is a fixed sequence of them. Every
+chapter has the same shape — there are no acts and no mid-campaign turn. What changes
+across the campaign is who is alive, who the player knows, and how far **the cycle** has
+escalated, never the shape of the thing.
+([ADR 0008](adr/0008-flat-chapter-sequence.md))
+
+The flatness is load-bearing rather than a simplification. The cycle is a pattern that
+feeds itself; a campaign that dramatises it by changing shape is describing it instead of
+enacting it. It is also required by ADR 0001, which withholds the corrective feedback until
+the end — a structural turn in the middle would be that feedback, delivered early.
+
+Chapters are an authoring structure and are **never surfaced as a count**. No chapter
+number, no progress bar, no position in a sequence.
+
 ## 4. Cast
 
 **Jamal** — player character. Native to the Block; his history there predates the game.
@@ -113,6 +127,15 @@ about — which is the one signal this whole mode exists to produce.
 
 **Requirement.** The scarcity must read as a fact of life, not as a timer. If players
 perceive a stress mechanic they will optimize against it instead of choosing honestly.
+
+**How the budget ends.** One chapter is one budget of time outside plus the bip that closes
+it, so the interval over which scarcity is spent and the chapter are the same thing. The
+player chooses *when* to go, not *whether* — and nothing expires to make them. The things
+to do outside simply run out, and going is what is left.
+([ADR 0008](adr/0008-flat-chapter-sequence.md))
+
+This is how the requirement above is met: the player is never pushed by a countdown, only
+by having spent what they had.
 
 ## 6. Mode: Bipping out
 
@@ -214,8 +237,14 @@ escalating pressure against a roster that only shrinks:
 | Decision | Where | Stakes |
 |---|---|---|
 | Who to spend time with | Outside | Determines who you will grieve |
-| Whether to bip out | Outside → bip | Winning still feeds **the cycle** |
+| When to bip out | Outside → bip | Winning still feeds **the cycle** |
 | Your seat, and who fills the other | Preparation | Whoever you bring may not return |
+
+The second decision is *when*, not *whether* — the player cannot opt out of a bip, only
+choose the moment ([ADR 0008](adr/0008-flat-chapter-sequence.md)). This is a narrowing of
+how ADR 0003 originally framed it, and it is deliberate: an opt-out is a dominant strategy
+in either direction, and **beef** is defined as a condition with no terms under which it
+could be declared over. A condition is not something you decline.
 
 A conversation-choice layer would compete with this for the player's attention — players
 are trained to read dialogue prompts as "the choices" and a roster screen as a loadout,
@@ -237,6 +266,9 @@ contradicts it.
   (ADR 0006)
 - **Last-member protection, bipping out alone, multiple endings ranked by roster count,
   and survivor tallies** (ADR 0007)
+- **Acts and mid-campaign structural turns**; any beat delivering the design's argument
+  before the ending; variable-length chapters containing multiple bips; surfaced chapter
+  counts or progress indicators; forcing a bip by countdown (ADR 0008)
 - **Manual saves** (§7)
 - **Real people and real events** from O-Block (§2)
 
@@ -280,10 +312,17 @@ None of these threaten what is settled above. All need answers before production
    split. See [`cast-placeholders.md`](cast-placeholders.md).
 5. **The eight themselves.** Each needs a capability and, more importantly, a specific
    cost-of-loss. This is the next substantial design work.
-6. **How scarcity is expressed.** That time outside is limited is settled; whether it is
-   days, visits, or fictional pressure is not.
-7. **Campaign length and chapter structure.** Undefined, and now load-bearing: ADR 0007
-   fixes the ending to the chapter structure rather than to the roster, so the campaign
-   cannot have a defined end until this does.
-8. **How the beef flares.** What generates a reason to bip out, and whether the player can
-   decline indefinitely.
+6. **How scarcity is expressed.** Narrowed by ADR 0008, not closed. The *unit* is settled —
+   one chapter is one budget of time outside — and so is the fact that the budget running
+   out, rather than a clock, is what sends the player. What that budget is made of in the
+   fiction, and how a player perceives it running low without perceiving a timer, is still
+   open. This is the remaining half of ADR 0005's hardest requirement.
+7. **How the beef flares.** What generates a reason to bip out. The other half of this
+   question — whether the player can decline indefinitely — is settled by ADR 0008: they
+   cannot.
+8. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
+   fixes that it is monotonic and that winning still escalates. Its shape remains
+   deliberately undecided.
+9. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
+   chapter count — ADR 0008 makes the two a single knob, since together they determine
+   whether an empty set stays reachable and unlikely.
