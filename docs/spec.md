@@ -243,6 +243,23 @@ which is the specific failure mode ADR 0001 warns against. Skill must save *a na
 person*, visibly, with a one-step causal line: you covered the stairwell, so Marcus made
 it home.
 
+**Tuning target: roughly one bip in four costs the player their companion.** Against
+sixteen chapters ([ADR 0008](adr/0008-flat-chapter-sequence.md)) that is about four
+deaths, so the common outcome is a set cut in half — with nobody lost and everybody lost
+both reachable and both rare.
+
+**This is not a probability the game rolls.** There is no dice throw deciding whether a
+member comes home. It is the *outcome encounter tuning should produce for a competent
+player*, and skill moves it in both directions: someone who plays well finishes with more
+of the set alive, someone who struggles finishes with fewer. That is ADR 0001's individual
+agency doing exactly what it promises — playing well saves the person in front of you —
+and it means the nine-way spread of surviving rosters
+([ADR 0007](adr/0007-zero-is-an-ending-not-a-fail-state.md)) comes from how the player
+played rather than from variance.
+
+The number and the chapter count are a single dial. Sixteen chapters at one in four and
+thirty-two at one in eight produce the same four deaths, so neither can be tuned alone.
+
 ### 6.4 Return
 
 The player returns to Outside, possibly with one fewer member of the set. The loop repeats.
@@ -377,6 +394,7 @@ None of these threaten what is settled above. All need answers before production
 2. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
    fixes that it is monotonic and that winning still escalates. Its shape remains
    deliberately undecided.
-3. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
-   chapter count — ADR 0008 makes the two a single knob, since together they determine
-   whether an empty set stays reachable and unlikely.
+3. **Encounter tuning.** The target is set — roughly one bip in four costs the player their
+   companion, against sixteen chapters (§6.3). Whether encounters as built actually produce
+   that for a competent player can only be answered by playing them, and the target moves
+   with the chapter count rather than independently.
