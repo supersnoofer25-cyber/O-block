@@ -84,9 +84,9 @@ number, no progress bar, no position in a sequence.
 
 **Jamal** — player character. Native to the Block; his history there predates the game.
 
-**The set** — eight members. The player meets all eight within the first hour. There is no
-recruitment and no replacement; the roster only shrinks.
-([ADR 0002](adr/0002-permanent-death-shrinking-set.md))
+**The set** — eight members, called **Roundhill** after the block they come from. The
+player meets all eight within the first hour. There is no recruitment and no replacement;
+the roster only shrinks. ([ADR 0002](adr/0002-permanent-death-shrinking-set.md))
 
 Members are differentiated by **relationship and consequence, never by combat class or
 loadout**. Each has a mild capability and a specific cost attached to their loss. The
@@ -327,6 +327,9 @@ None of these threaten what is settled above. All need answers before production
 5. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
    fixes that it is monotonic and that winning still escalates. Its shape remains
    deliberately undecided.
-6. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
+6. **The rival set's block, and therefore its name.** Now a gap rather than an omission:
+   ours is named after its block, and a named set facing an unnamed one reads oddly the
+   moment anyone has to refer to them out loud.
+7. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
    chapter count — ADR 0008 makes the two a single knob, since together they determine
    whether an empty set stays reachable and unlikely.

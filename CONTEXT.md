@@ -71,17 +71,19 @@ the player each time. Members differ from one another by relationship and by wha
 loss would cost — never by combat class or loadout.
 
 ## Rival Set
-Another set, from another block, currently in **beef** with ours. Structurally identical
-to our own set — same size, same lack of hierarchy, same logic. Never written as an
-organization with plans; it is a mirror, not an antagonist faction.
+Another set, from another block, currently in **beef** with ours. Named after its own block
+exactly as ours is. Structurally identical to our own set — same size, same lack of
+hierarchy, same logic. Never written as an organization with plans; it is a mirror, not an
+antagonist faction.
 
 ## Roundhill
-The name of **the Block**. The proper noun; "the Block" remains what we and its residents
-call it in ordinary speech.
+The name of **the Block**, and by inheritance the name of the **set** that comes from it —
+one word covers the place and the people. The proper noun; "the Block" remains what we and
+its residents call the place in ordinary speech.
 
 ## Set
-The loose, block-level affiliation the player belongs to — the people who grew up on
-**the Block** together. Defined by proximity and shared history, not by rank, dues, or
+The loose, block-level affiliation the player belongs to, called **Roundhill** after the
+block it comes from — the people who grew up on **the Block** together. Defined by proximity and shared history, not by rank, dues, or
 territory. A set has no boss and no org chart; membership is a fact of where you're from
 rather than something you join. Deliberately *not* a "gang" in the organized-crime sense,
 and we avoid that word in our own writing except when an outside character uses it.
