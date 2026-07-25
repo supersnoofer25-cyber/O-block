@@ -72,6 +72,37 @@ optimising the roster a way to rank it. The shape to aim for is `spec.md` §4's 
 one who never panics is the one whose mother feeds me* — where the two facets are
 unrelated. Tyrone landed on that line almost exactly, except that it is him.
 
+## Time outside
+
+Spending time with a member is not talking to him. Each is doing a particular thing in a
+particular place, and time with him means doing it alongside him —
+[ADR 0005](adr/0005-scarce-time-outside.md)'s *somewhere in it doing something* and *where
+they tend to be*, made concrete.
+
+| | Time with him is | Which is why his death is felt |
+|---|---|---|
+| **Alex** | Around, with his sister there | You knew her, so you notice she stops coming out |
+| **Tyrone** | At his spot while he sells | You ate there, so you notice nobody does |
+| **Anthony** | Caught before or after work | You saw him leaving, so you notice nobody leaves |
+| **James** | Up on the church roof with him | You were up there, so you notice it stops getting fixed |
+| **Daquavion** | At his place, around the baby | You held her, so you notice they are gone |
+| **Marcus** | Under a car | You worked on them, so you notice they stop running |
+| **Omar** | At the hoop | You played, so you notice nobody plays |
+| **Joshua** | At home, because you live there | You lived with him, so you notice the house |
+
+**The activity is not free choice — it is the man's cost-of-loss material.** That is what
+makes the third column work. A player who never went to the hoop learns that Omar is dead
+and sees nothing change; a player who played there every chapter watches it stand empty.
+This is the mechanism behind familiarity gating recognition of a cost, which
+[ADR 0009](adr/0009-behaviour-and-absence-never-a-number.md) requires and which nothing
+else explains how to deliver.
+
+**It is also the answer to per-chapter monotony.** There are eight distinct things to do
+outside and the player does a different handful each chapter, because who they choose
+changes. Variety comes from their own choice rather than from a task list, which
+[ADR 0005](adr/0005-scarce-time-outside.md) forecloses and which would pull attention from
+people onto objectives — tasks can be completed and people cannot.
+
 ## Ties
 
 A tie is something between two members, so that when one dies the other changes. Without
