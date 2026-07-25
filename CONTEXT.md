@@ -25,6 +25,16 @@ from **O-Block** in geography, architecture, and cultural texture, but its name,
 residents, and everything that happens on it are invented. When we say "the Block"
 unqualified, we always mean the fictional one — the game's setting.
 
+## Capability
+What a member of the **set** is like on a **bip**. One behaviour, characteristic of him,
+recognisable whichever seat he takes. Not a skill level and not a role: two members are
+never better or worse at the same thing, only different.
+
+## Cost of Loss
+What **the Block** loses when a member of the **set** is killed. Always a specific thing
+that was there and now is not, and always something other than what he was like on a bip.
+Not the grief itself — the cost is what stops, not the feeling about it.
+
 ## The Cycle
 The self-feeding pattern by which each act of retaliation creates the cause of the next
 one. Named as a thing in its own right because it behaves like one: it outlives the

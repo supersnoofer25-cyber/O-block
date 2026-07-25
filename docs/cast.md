@@ -23,12 +23,12 @@ So each man is one trait that shows up whichever seat he takes.
 | | Capability | Cost of loss |
 |---|---|---|
 | **Alex** | **Doesn't hesitate.** On the back he fires first, before you've decided this is happening. Riding, he commits to the approach — closer than you'd have chosen. | **He has a little sister.** After Alex she stops coming outside. She is still on the Block; you just don't see her any more. |
-| **Tyrone** | **Won't shut up.** Riding, he's calling what's ahead; on the back, what's behind. You always know what he's seeing. | *unauthored* |
-| **Anthony** | **The one who says no.** Riding, he takes the careful exit. On the back, he holds until he's sure. | *unauthored* |
-| **James** | **Doesn't leave early.** On the back he keeps firing until it's actually done. Riding, he won't pull out while anyone is still exposed. | **After James, going out is harder for everyone.** Permanently. |
+| **Tyrone** | **Won't shut up.** Riding, he's calling what's ahead; on the back, what's behind. You always know what he's seeing. | **He sells food.** After Tyrone the Block doesn't eat the way it did. |
+| **Anthony** | **The one who says no.** Riding, he takes the careful exit. On the back, he holds until he's sure. | **He has a job.** After Anthony nobody on the Block is working — the thread to an ordinary life goes with him. |
+| **James** | **Doesn't leave early.** On the back he keeps firing until it's actually done. Riding, he won't pull out while anyone is still exposed. | **He fixes the church roof.** After James it doesn't get fixed. The church stands and people use less of it. |
 | **Daquavion** | **Moves first.** Reacting, not dodging — when it goes wrong he is already moving. | **He has a newborn.** After Daquavion, his girl takes the baby off the Block. Two people who were part of the place are gone from it. |
 | **Marcus** | **Knows the way out.** Riding, he takes exits you wouldn't have found. On the back, he's telling you where to go before you've asked. | **He works on cars.** After Marcus they stop running — not his, everyone's. The Block loses the man who kept it moving. |
-| **Omar** | **Acts like nothing is happening.** Riding, he never tenses up. On the back, he's the calmest gun in the set, because he hasn't quite registered that it's real. | **The highest in the set.** He is the reason it is bearable — being outside with him is the only time the game isn't about the **beef**. He is what you were protecting. |
+| **Omar** | **Acts like nothing is happening.** Riding, he never tenses up. On the back, he's the calmest gun in the set, because he hasn't quite registered that it's real. | **He has a basketball hoop.** After Omar nobody plays. It stands there and nobody uses it. |
 | **Joshua** | **Doesn't flinch.** Too young to have learned to. Riding, he goes where you point without asking; on the back, he doesn't look away. | **He lives with Jamal.** After Joshua, the house Jamal comes back to is empty. |
 
 ### Notes
@@ -70,7 +70,31 @@ A capability is exercised **bipping out**; a cost of loss is paid **outside**. D
 from the other collapses them into a single fact about a person and hands a player
 optimising the roster a way to rank it. The shape to aim for is `spec.md` §4's own — *the
 one who never panics is the one whose mother feeds me* — where the two facets are
-unrelated.
+unrelated. Tyrone landed on that line almost exactly, except that it is him.
+
+**Anthony's job needs Marcus's cars.** This tie was not authored; it fell out of the two
+men. [#4](https://github.com/supersnoofer25-cyber/O-block/issues/4)'s open question 3 asks
+how many ties the graph should carry, and this is the first candidate — worth preferring
+ties that emerge this way over ties invented to fill a quota.
+
+**A cost hollows a place; it never removes one.** James's church stands and is used less.
+Joshua's house is still there and is empty. Omar's hoop is still up. If costs could delete
+locations the hub would shrink as the campaign runs, and
+[ADR 0005](adr/0005-scarce-time-outside.md) needs it small, dense, and legible enough that
+finding people is knowledge rather than searching. This answers
+[#4](https://github.com/supersnoofer25-cyber/O-block/issues/4)'s open question 4.
+
+**No two costs subtract the same kind of thing.** A service, a rhythm, mobility, a
+gathering place, play, a departure, a withdrawal, a home. Story 26 requires each loss be
+attributable to a specific man's absence, which fails the moment two of them read alike —
+the near-misses were Alex against Daquavion, and Marcus against James.
+
+**Taken together they compose, and that is the point.** Run a costly campaign and the Block
+loses its food, its work, its mobility, its gathering place, its play, its children, and
+finally the house Jamal comes home to. What is left is the **beef** and nothing else. This
+is what [ADR 0007](adr/0007-zero-is-an-ending-not-a-fail-state.md) meant when it said the
+ending is populated by what is missing and the Block is exactly as empty as the player made
+it — the ending needs no additional system, because these eight subtractions *are* it.
 
 **Joshua is Jamal's younger brother**, and he **starts known** — full familiarity from the
 first hour, with no time **outside** required. You cannot not know your own brother.
