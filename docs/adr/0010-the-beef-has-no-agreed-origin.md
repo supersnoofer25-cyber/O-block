@@ -1,6 +1,6 @@
 # 0010. What started the beef is contested, and the game never resolves it
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-07-25
 
 ## Context

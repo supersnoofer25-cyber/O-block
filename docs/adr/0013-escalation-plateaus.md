@@ -1,6 +1,6 @@
 # 0013. Escalation climbs early and then plateaus; the campaign does not get harder toward the end
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-07-25
 
 ## Context

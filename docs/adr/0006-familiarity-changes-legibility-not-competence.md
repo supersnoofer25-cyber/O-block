@@ -1,6 +1,6 @@
 # 0006. Familiarity changes how legible a companion is, not how competent they are
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-07-24
 
 ## Context

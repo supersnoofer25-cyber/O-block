@@ -46,6 +46,11 @@ including the player and the people he brought. Deliberately distinguished from 
 set-piece battle or a wave fight; we do not use "encounter" to mean a sustained
 engagement, because we do not have those.
 
+## Familiarity
+How well **Jamal** knows a particular member of the **set**. Held per person, never for the
+set as a whole, and never lost once gained. A working term rather than one drawn from the
+project's own vernacular — it names the right thing, in the wrong register.
+
 ## Jamal
 The player character. A native of **the Block** and a member of its **set**. Never an
 outsider, a newcomer, or a returning exile — his history on the Block predates the game.
