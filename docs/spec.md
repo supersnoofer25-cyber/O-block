@@ -14,9 +14,9 @@ Terms in **bold** are defined in `CONTEXT.md` and are used strictly.
 
 ## 1. Premise
 
-**Jamal** is a native of **the Block** — **Roundhill**, a fictional South Side Chicago block. His **set** —
-the eight people he grew up alongside — is in **beef** with a **rival set**. He is trying
-to protect them.
+**Jamal** is a native of **the Block** — **Roundhill**, a fictional South Side Chicago
+block. His **set** — the eight people he grew up alongside — is in **beef** with a **rival
+set**. He is trying to protect them.
 
 He cannot. Every retaliation he wins produces the reason for the next one, and the set
 gets smaller. He is not told this, and the game never states it. He experiences it.
