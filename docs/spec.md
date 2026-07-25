@@ -91,8 +91,8 @@ intended shape of a roster decision is *"my best shooter is fifteen"* or *"the o
 never panics is the one whose mother feeds me"* — a moral choice wearing a tactical
 costume.
 
-Current names are **placeholders** pending rename; see
-[`cast-placeholders.md`](cast-placeholders.md).
+The eight are **Alex, Tyrone, Anthony, James, Daquavion, Marcus, Omar, and Joshua**. Names
+are settled; who these people are is not. See [`cast.md`](cast.md).
 
 ## 5. Mode: Outside
 
@@ -308,21 +308,20 @@ None of these threaten what is settled above. All need answers before production
 3. **What started the beef.** Undefined. Note that **beef** is defined as having no start
    date every participant would name the same way — so this may be answered as
    deliberately contested rather than as a fact.
-4. **The rename.** Eight placeholder names to replace; Connor/Collin collide and must be
-   split. See [`cast-placeholders.md`](cast-placeholders.md).
-5. **The eight themselves.** Each needs a capability and, more importantly, a specific
-   cost-of-loss. This is the next substantial design work.
-6. **How scarcity is expressed.** Narrowed by ADR 0008, not closed. The *unit* is settled —
+4. **The eight themselves.** Each needs a capability and, more importantly, a specific
+   cost-of-loss. This is the next substantial design work. Names are settled — see
+   [`cast.md`](cast.md).
+5. **How scarcity is expressed.** Narrowed by ADR 0008, not closed. The *unit* is settled —
    one chapter is one budget of time outside — and so is the fact that the budget running
    out, rather than a clock, is what sends the player. What that budget is made of in the
    fiction, and how a player perceives it running low without perceiving a timer, is still
    open. This is the remaining half of ADR 0005's hardest requirement.
-7. **How the beef flares.** What generates a reason to bip out. The other half of this
+6. **How the beef flares.** What generates a reason to bip out. The other half of this
    question — whether the player can decline indefinitely — is settled by ADR 0008: they
    cannot.
-8. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
+7. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
    fixes that it is monotonic and that winning still escalates. Its shape remains
    deliberately undecided.
-9. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
+8. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
    chapter count — ADR 0008 makes the two a single knob, since together they determine
    whether an empty set stays reachable and unlikely.
