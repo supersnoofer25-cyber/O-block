@@ -41,7 +41,7 @@ type Member struct {
 	Name       string
 	Capability Capability
 	CostOfLoss string   // what the Block loses when he is killed
-	Activity   string   // what time outside with him consists of
+	Activity   string   // where you find him, as a phrase that slots into a sentence
 	Tie        MemberID // the one other member he is tied to
 }
 
@@ -75,7 +75,7 @@ var TheSet = []Member{
 			OnBack: "Fires first, before you've decided this is happening",
 		},
 		CostOfLoss: "His little sister stops coming outside. She is still on the Block; you just don't see her any more.",
-		Activity:   "Around, with his sister there",
+		Activity:   "around, with his sister there",
 		Tie:        Daquavion,
 	},
 	{
@@ -87,7 +87,7 @@ var TheSet = []Member{
 			OnBack: "Telling you what's behind you",
 		},
 		CostOfLoss: "He sells food. After Tyrone the Block doesn't eat the way it did.",
-		Activity:   "At his spot while he sells",
+		Activity:   "at his spot while he sells",
 		Tie:        James,
 	},
 	{
@@ -99,7 +99,7 @@ var TheSet = []Member{
 			OnBack: "Holds until he's sure",
 		},
 		CostOfLoss: "He has a job. After Anthony nobody on the Block is working — the thread to an ordinary life goes with him.",
-		Activity:   "Caught before or after work",
+		Activity:   "before or after work",
 		Tie:        Marcus,
 	},
 	{
@@ -111,7 +111,7 @@ var TheSet = []Member{
 			OnBack: "Keeps firing until it's actually done",
 		},
 		CostOfLoss: "He fixes the church roof. After James it doesn't get fixed, and the Block uses less of where it gathers.",
-		Activity:   "Up on the church roof with him",
+		Activity:   "up on the church roof",
 		Tie:        Tyrone,
 	},
 	{
@@ -123,7 +123,7 @@ var TheSet = []Member{
 			OnBack: "Already firing when it goes wrong",
 		},
 		CostOfLoss: "He has a newborn. After Daquavion his girl takes the baby off the Block.",
-		Activity:   "At his place, around the baby",
+		Activity:   "at his place, around the baby",
 		Tie:        Alex,
 	},
 	{
@@ -135,7 +135,7 @@ var TheSet = []Member{
 			OnBack: "Telling you where to go before you've asked",
 		},
 		CostOfLoss: "He works on cars. After Marcus they stop running — not his, everyone's.",
-		Activity:   "Under a car",
+		Activity:   "under a car",
 		Tie:        Anthony,
 	},
 	{
@@ -147,7 +147,7 @@ var TheSet = []Member{
 			OnBack: "The calmest gun in the set, because he hasn't quite registered that it's real",
 		},
 		CostOfLoss: "He has a basketball hoop. After Omar nobody plays. It stands there and nobody uses it.",
-		Activity:   "At the hoop",
+		Activity:   "at the hoop",
 		Tie:        Joshua,
 	},
 	{
@@ -159,7 +159,7 @@ var TheSet = []Member{
 			OnBack: "Doesn't look away",
 		},
 		CostOfLoss: "He lives with Jamal. After Joshua, the house Jamal comes back to is empty.",
-		Activity:   "At home, because you live there",
+		Activity:   "at home, because you live there",
 		Tie:        Omar,
 	},
 }
