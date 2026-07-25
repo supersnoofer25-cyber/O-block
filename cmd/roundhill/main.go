@@ -2,9 +2,10 @@
 //
 // This is a prototype harness, not the game. There are no graphics, no bike and no
 // shooting — it exists to answer one question cheaply: does the rhythm of choosing
-// who to spend an evening with, and choosing who to take, hold up over sixteen
-// chapters? That is the bet ADRs 0008 and 0013 make and cannot otherwise test until
-// something is playable.
+// who to spend an evening with, and choosing who to take, hold up over a campaign?
+// That is the bet ADRs 0008 and 0013 make and cannot otherwise test until something is
+// playable. It has already moved the number once: sixteen chapters went flat around the
+// tenth in play, and campaign.Chapters is twelve because of it.
 //
 // It deliberately honours the foreclosures, so what you feel here is the real design:
 //
@@ -17,10 +18,12 @@
 // Each chapter opens with a flare — why tonight — which comes from the player's last
 // bip and from nothing else (ADR 0011). Where each man is, and why he goes in when he
 // goes, change chapter to chapter, which is the ambient authoring ADR 0012 asks for and
-// never got. Both exist because the first version of this harness had neither: sixteen
+// never got. Both exist because the first version of this harness had neither: a run of
 // structurally identical chapters, one fixed line per man, and no reason to go. It read
 // exactly as flat as ADR 0008 and ADR 0013 warned it would, which told us nothing about
 // the design, because the variation those decisions rest on had not been written yet.
+// With both in, it stayed flat from about the tenth chapter — which is the same reading
+// with the confound removed, and is what the cut to twelve answers.
 //
 // The encounter is not simulated. This harness rolls for whether a companion comes
 // home and hands the result to the module, which is exactly the boundary issue #3
@@ -41,7 +44,13 @@ import (
 func main() {
 	auto := flag.Bool("auto", false, "play it through without asking, to watch a whole campaign")
 	seed := flag.Int64("seed", 1, "seed for whether companions come home")
-	lossRate := flag.Int("loss", 4, "one companion lost in N bips, the tuning target")
+	// Length and loss rate are tuned together, never independently — ADR 0008 is
+	// explicit that they are one knob, because expected losses across a full campaign
+	// have to land near half the roster whatever the length is. Cutting sixteen
+	// chapters to twelve without this would finish a typical campaign three men down
+	// instead of four, and the diminished set ADR 0007 writes its ending for would
+	// quietly become a fuller one.
+	lossRate := flag.Int("loss", 3, "one companion lost in N bips, the tuning target")
 	flag.Parse()
 
 	g := &game{

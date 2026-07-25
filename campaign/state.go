@@ -9,12 +9,26 @@ const (
 	// Chapters is the fixed length of a campaign (ADR 0008). The ending is tied to
 	// this rather than to the roster: how many are alive when it arrives is the
 	// variable.
-	Chapters = 16
+	//
+	// Was sixteen, which ADR 0008 offered explicitly as a starting point and as
+	// tuning rather than decision. Playtesting the prototype found the campaign going
+	// flat around the tenth chapter with the ambient content and flares in place — so
+	// with the confound that would have explained it away already removed. That is the
+	// case ADR 0008 said to answer by cutting chapters rather than by adding an act
+	// structure, because the flatness is carrying an argument and the length is not.
+	//
+	// Twelve is the shortest cut that clears where it sagged while staying above the
+	// floor: the count must exceed the roster or an empty set is unreachable and ADR
+	// 0007's central case becomes fiction.
+	Chapters = 12
 
 	// IntensityCeiling is where escalation stops climbing (ADR 0013). It rises over
-	// roughly the first third and the remaining chapters sit at the top; chapter
-	// sixteen is no more intense than chapter eight.
-	IntensityCeiling = 5
+	// roughly the first third and the remaining chapters sit at the top; the last
+	// chapter is no more intense than the middle one.
+	//
+	// Cut with the campaign, because "roughly the first third" is the part ADR 0013
+	// decided and the number is what follows from it. A third of twelve is four.
+	IntensityCeiling = 4
 
 	// DepartAlongside is how many other members go inside each time Jamal spends an
 	// evening with someone. He was with Marcus, so he was not there when Omar went
@@ -25,9 +39,10 @@ const (
 	//
 	// This is what makes story 4 hold, and it holds arithmetically rather than by
 	// hope: a chapter yields at most ceil(8/(1+DepartAlongside)) = 2 evenings, so a
-	// campaign yields at most 32, while knowing all eight well would take 8 * 5 = 40.
+	// campaign yields at most 24, while knowing all eight well would take 8 * 5 = 40.
 	// Reaching high familiarity with the whole set is impossible before anyone has
-	// even died.
+	// even died. Cutting the campaign to twelve widened that margin rather than
+	// threatening it, so the story holds by more than it did.
 	EveningsToClose = 5
 )
 

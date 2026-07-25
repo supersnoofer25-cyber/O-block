@@ -51,9 +51,9 @@ func FlareFor(s State) Flare {
 
 // news picks the line. Kind comes from the last bip; severity comes from intensity,
 // which climbs over the first third of the campaign and then sits at its ceiling
-// (ADR 0013). Authoring the back ten chapters against a fixed intensity is what that
-// decision asked for — the plateau is the statement, and chapter sixteen is no worse
-// than chapter eight.
+// (ADR 0013). Authoring the back two thirds against a fixed intensity is what that
+// decision asked for — the plateau is the statement, and the last chapter is no worse
+// than the middle one.
 func news(s State) string {
 	if !s.LastBip.Happened {
 		return inherited

@@ -86,3 +86,17 @@ chapter authored as the worst one. Difficulty that rises with chapter number.
 relentless. The fix is in what fills those chapters — the roster and the Block are supposed
 to be carrying them — not in raising the curve, which would trade a pacing problem for the
 attribution problem this decision exists to prevent.
+
+## Tuning log
+
+**2026-07-25 — the ceiling now sits at four rather than five, because the campaign is
+twelve chapters rather than sixteen.** See ADR 0008's tuning log. The shape is untouched:
+what this decision fixed is *roughly the first third and then a plateau*, and the number is
+only ever what follows from the length. A third of twelve is four.
+
+The back half did read as flat in play, which is this decision's revisit condition. It was
+answered the way the condition says to answer it — the fix went into what fills the
+chapters, via ADR 0011's flares and ADR 0012's per-chapter ambient content, and then into
+the length. The curve was not raised. Ten chapters of unwritten plateau were the problem,
+and a plateau with something happening on it is a different thing from the same plateau
+with nothing.
