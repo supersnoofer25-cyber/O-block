@@ -20,10 +20,20 @@ The project's standing term for the act — we do not say "raid," "mission," or 
 as a noun as well: *a bip* is one such outing.
 
 ## The Block
-The fictional South Side Chicago block where *Our Block* takes place. Recognizably drawn
-from **O-Block** in geography, architecture, and cultural texture, but its name, its
-residents, and everything that happens on it are invented. When we say "the Block"
-unqualified, we always mean the fictional one — the game's setting.
+The fictional South Side Chicago block where *Our Block* takes place, named **Roundhill**.
+Recognizably drawn from **O-Block** in geography, architecture, and cultural texture, but
+its name, its residents, and everything that happens on it are invented. When we say "the
+Block" unqualified, we always mean the fictional one — the game's setting.
+
+## Capability
+What a member of the **set** is like on a **bip**. One behaviour, characteristic of him,
+recognisable whichever seat he takes. Not a skill level and not a role: two members are
+never better or worse at the same thing, only different.
+
+## Cost of Loss
+What **the Block** loses when a member of the **set** is killed. Always a specific thing
+that was there and now is not, and always something other than what he was like on a bip.
+Not the grief itself — the cost is what stops, not the feeling about it.
 
 ## The Cycle
 The self-feeding pattern by which each act of retaliation creates the cause of the next
@@ -50,6 +60,11 @@ name is a holdover, not a statement of setting.
 The second seat on **the bike** — the passenger, and the one who shoots. Either the
 player or a member of the **set** occupies it; whoever is not on the back is riding.
 
+## Orinda
+The block the **rival set** comes from, and by the same inheritance as **Roundhill** the
+name of that set. Invented, like ours, and never depicted with more structure than our own
+block has.
+
 ## Outside
 The time between bips, spent on foot on **the Block** among the **set**. The game's other
 mode, and its opposite: no bike, no weapons drawn, no destination. "Being outside" is
@@ -61,13 +76,19 @@ the player each time. Members differ from one another by relationship and by wha
 loss would cost — never by combat class or loadout.
 
 ## Rival Set
-Another set, from another block, currently in **beef** with ours. Structurally identical
-to our own set — same size, same lack of hierarchy, same logic. Never written as an
-organization with plans; it is a mirror, not an antagonist faction.
+Another set, from another block, currently in **beef** with ours — **Orinda**, named after
+its block exactly as ours is. Structurally identical to our own set — same size, same lack
+of hierarchy, same logic. Never written as an organization with plans; it is a mirror, not
+an antagonist faction.
+
+## Roundhill
+The name of **the Block**, and by inheritance the name of the **set** that comes from it —
+one word covers the place and the people. The proper noun; "the Block" remains what we and
+its residents call the place in ordinary speech.
 
 ## Set
-The loose, block-level affiliation the player belongs to — the people who grew up on
-**the Block** together. Defined by proximity and shared history, not by rank, dues, or
+The loose, block-level affiliation the player belongs to, called **Roundhill** after the
+block it comes from — the people who grew up on **the Block** together. Defined by proximity and shared history, not by rank, dues, or
 territory. A set has no boss and no org chart; membership is a fact of where you're from
 rather than something you join. Deliberately *not* a "gang" in the organized-crime sense,
 and we avoid that word in our own writing except when an outside character uses it.
