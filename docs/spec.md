@@ -3,7 +3,7 @@
 - **Status:** Draft
 - **Date:** 2026-07-24
 - **Sources:** [`CONTEXT.md`](../CONTEXT.md) for vocabulary; ADRs
-  [0001](adr/0001-tactical-agency-strategic-futility.md)–[0005](adr/0005-scarce-time-outside.md)
+  [0001](adr/0001-tactical-agency-strategic-futility.md)–[0007](adr/0007-zero-is-an-ending-not-a-fail-state.md)
   for the reasoning behind every decision below.
 
 This document describes *what* the game is. It does not re-argue the decisions — where a
@@ -99,6 +99,18 @@ This is the mechanism by which the player authors their own tragedy rather than 
 it. It is also why some deaths will land flat: that is the system working, and is not to
 be "fixed" by guaranteeing every character an introduction.
 
+**What knowing someone buys.** Nothing mechanical. A set member is exactly as capable on a
+**bip** whether the player knows them well or has never spoken to them. What changes is
+how readable that person is — a member the player knows can be anticipated, and one they
+do not know is opaque. It is carried by the member's own behaviour and speech, never by a
+meter, a marker, or any interface element.
+([ADR 0006](adr/0006-familiarity-changes-legibility-not-competence.md))
+
+Time outside therefore pays off on a bip without becoming experience points. The moment it
+buys competence it becomes a resource to farm, the set becomes rankable on a single axis,
+and the player starts spending time on who they intend to use rather than who they care
+about — which is the one signal this whole mode exists to produce.
+
 **Requirement.** The scarcity must read as a fact of life, not as a timer. If players
 perceive a stress mechanic they will optimize against it instead of choosing honestly.
 
@@ -172,6 +184,24 @@ are the small roster, scenes authored to be robust to absence, and accepting red
 specificity in later dialogue. Plot armor is explicitly rejected as a mitigation; if the
 load proves unshippable, shrink the roster instead.
 
+**When the set reaches zero.** The campaign has one ending, fixed by its chapter structure
+rather than by the roster; how many are alive when it arrives is the variable. An empty set
+reaches that same ending early — the loop cannot continue without someone to fill the other
+seat, so the campaign proceeds to its ending from wherever it is. A player may finish with
+any number from eight down to none.
+([ADR 0007](adr/0007-zero-is-an-ending-not-a-fail-state.md))
+
+Zero is not the destination and must not be inevitable — a campaign that simply runs until
+everyone is dead is the pure tragedy ADR 0001 rejected. Nor is it a failure: it is the
+first point at which the game's argument is legible, the player having performed well every
+time and lost the set anyway.
+
+**Nothing at the ending tallies the survivors** — no count, no score, no list of who made
+it. A survival tally converts every death into a score in the final seconds, which is the
+fail-state framing above arriving at the last possible moment. The ending is populated by
+what is missing instead: each loss subtracts something from the Block permanently, so the
+Block at the end is exactly as empty as the player made it.
+
 ## 8. Choice architecture
 
 There is **no dialogue choice system**. No dialogue wheel, no branching conversation trees,
@@ -202,6 +232,11 @@ contradicts it.
 - **Dialogue choices** and relationship-flag bookkeeping (ADR 0003)
 - **Cars and alternative transport** (ADR 0004)
 - **Guaranteed introductions** to every set member (ADR 0005)
+- **Familiarity as a stat** — meters, tiers, or any interface element surfacing a
+  companion's intent; any competence that varies with how well the player knows someone
+  (ADR 0006)
+- **Last-member protection, bipping out alone, multiple endings ranked by roster count,
+  and survivor tallies** (ADR 0007)
 - **Manual saves** (§7)
 - **Real people and real events** from O-Block (§2)
 
@@ -214,6 +249,13 @@ not.
 lives. If that AI reads as incompetent, players will experience deaths as the game
 ignoring their input — precisely the trigger ADR 0001 names for revisiting the whole
 thesis. This is a primary system.
+
+ADR 0006 narrows this risk without removing it: because familiarity never affects
+competence, no companion is ever deliberately authored as bad, so the problem is holding
+one high bar rather than shipping members who fall below it on purpose. What ADR 0006 adds
+in its place is behavioural variation between members the player knows and members they do
+not — real animation, audio, and VO scope, and the kind that gets cut first because
+nothing visibly breaks when it is missing.
 
 **The roster interface.** ADR 0003 placed the game's entire choice architecture on one
 screen. It must be exceptionally readable and must surface relationships and history
@@ -240,6 +282,8 @@ None of these threaten what is settled above. All need answers before production
    cost-of-loss. This is the next substantial design work.
 6. **How scarcity is expressed.** That time outside is limited is settled; whether it is
    days, visits, or fictional pressure is not.
-7. **Campaign length and chapter structure.** Undefined.
+7. **Campaign length and chapter structure.** Undefined, and now load-bearing: ADR 0007
+   fixes the ending to the chapter structure rather than to the roster, so the campaign
+   cannot have a defined end until this does.
 8. **How the beef flares.** What generates a reason to bip out, and whether the player can
    decline indefinitely.
