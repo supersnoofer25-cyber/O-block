@@ -170,5 +170,14 @@ the diminished set the ending is written for would have quietly become a fuller 
 in three, twenty auto-played campaigns averaged 4.4 losses against the target of half the
 roster, with no run losing nobody and none losing all eight — both extremes still tails.
 
-What has not been tested is whether twelve is itself too long. The sag was measured at
-sixteen, and the next honest reading comes from playing twelve through.
+Twelve was then played through, and it held to the end. That is the first reading this
+decision has that is not a warning: the sequence stayed worth playing for a full campaign
+without an act, a mid-campaign turn, or a climax, which is the whole of what ADR 0008 and
+[ADR 0013](0013-escalation-plateaus.md) bet and neither could show until something was
+playable. The remedy the monotony risk called for turned out to be length and the missing
+content, in that order, and not the structure.
+
+The bet is not proven, only survived. It was survived in a text harness with no bike, no
+shooting and no encounter, by a player who knows the design — none of which is the game,
+and the last of which is the weakest part of the evidence. What the harness can no longer
+tell us is whether twelve is right; that question now needs the real thing.
