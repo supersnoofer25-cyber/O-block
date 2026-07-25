@@ -26,8 +26,8 @@ So each man is one trait that shows up whichever seat he takes.
 | **Tyrone** | **Won't shut up.** Riding, he's calling what's ahead; on the back, what's behind. You always know what he's seeing. | *unauthored* |
 | **Anthony** | **The one who says no.** Riding, he takes the careful exit. On the back, he holds until he's sure. | *unauthored* |
 | **James** | **Doesn't leave early.** On the back he keeps firing until it's actually done. Riding, he won't pull out while anyone is still exposed. | **After James, going out is harder for everyone.** Permanently. |
-| **Daquavion** | **Moves first.** Reacting, not dodging — when it goes wrong he is already moving. | *unauthored* |
-| **Marcus** | **Knows the way out.** Riding, he takes exits you wouldn't have found. On the back, he's telling you where to go before you've asked. | *unauthored* |
+| **Daquavion** | **Moves first.** Reacting, not dodging — when it goes wrong he is already moving. | **He has a newborn.** After Daquavion, his girl takes the baby off the Block. Two people who were part of the place are gone from it. |
+| **Marcus** | **Knows the way out.** Riding, he takes exits you wouldn't have found. On the back, he's telling you where to go before you've asked. | **He works on cars.** After Marcus they stop running — not his, everyone's. The Block loses the man who kept it moving. |
 | **Omar** | **Acts like nothing is happening.** Riding, he never tenses up. On the back, he's the calmest gun in the set, because he hasn't quite registered that it's real. | **The highest in the set.** He is the reason it is bearable — being outside with him is the only time the game isn't about the **beef**. He is what you were protecting. |
 | **Joshua** | **Doesn't flinch.** Too young to have learned to. Riding, he goes where you point without asking; on the back, he doesn't look away. | **The one the story cannot absorb quietly.** |
 
@@ -43,6 +43,16 @@ conflict with it: he is the member a player who knows nobody can still bring.
 
 **James is set against Marcus.** Marcus knows the way out; James won't take it yet. Both
 are right sometimes.
+
+**Daquavion is the shape `spec.md` §4 was reaching for.** He is the best man to bring —
+already moving when it goes wrong — and he has the most waiting for him. Nothing about
+*moves first* tells you about the newborn, so a player optimising the roster cannot see the
+price coming. Bringing him is the decision the whole game is about.
+
+**Marcus's cars must not read as available transport.** ADR 0004 forecloses cars as a means
+of **bipping out**, and putting a mechanic on the Block invites *"why can't I take one?"*
+These are residents' cars — someone's mother's — not the set's. That has to be authored
+deliberately and visibly rather than left for a player to test.
 
 **Costs of loss come from what a man is on the Block, not from what he does on a bip.**
 A capability is exercised **bipping out**; a cost of loss is paid **outside**. Deriving one
