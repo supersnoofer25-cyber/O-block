@@ -6,9 +6,64 @@ The **set**, eight members:
 
 **Alex · Tyrone · Anthony · James · Daquavion · Marcus · Omar · Joshua**
 
-Names are settled. What each of these people *is* — a capability and a specific
-cost-of-loss — is not yet authored; that is the next substantial design work, and the
-contract it must satisfy is [issue #4](https://github.com/supersnoofer25-cyber/O-block/issues/4).
+Names are settled. Capabilities are mostly settled; costs of loss mostly are not. The
+contract all of it must satisfy is
+[issue #4](https://github.com/supersnoofer25-cyber/O-block/issues/4).
+
+## The eight
+
+**A capability is a behaviour, never a rating, and it is defined in both seats.** This is
+the rule the whole section runs on. "Good at shooting, bad at driving" is a score on the
+game's two verbs, and eight people scored on two axes is the loadout screen
+[ADR 0003](adr/0003-choice-lives-in-systems-not-dialogue.md) exists to prevent. Worse, it
+collapses two decisions into one: pick your seat and the companion is chosen for you,
+which is the failure [ADR 0004](adr/0004-dirt-bikes-only-and-per-bip-seat-choice.md) names.
+So each man is one trait that shows up whichever seat he takes.
+
+| | Capability | Cost of loss |
+|---|---|---|
+| **Alex** | **Doesn't hesitate.** On the back he fires first, before you've decided this is happening. Riding, he commits to the approach — closer than you'd have chosen. | *unauthored* |
+| **Tyrone** | **Won't shut up.** Riding, he's calling what's ahead; on the back, what's behind. You always know what he's seeing. | *unauthored* |
+| **Anthony** | **The one who says no.** Riding, he takes the careful exit. On the back, he holds until he's sure. | *unauthored* |
+| **James** | *unauthored* | **After James, going out is harder for everyone.** Permanently. |
+| **Daquavion** | **Moves first.** Reacting, not dodging — when it goes wrong he is already moving. | *unauthored* |
+| **Marcus** | **Knows the way out.** Riding, he takes exits you wouldn't have found. On the back, he's telling you where to go before you've asked. | *unauthored* |
+| **Omar** | *unauthored* | **The highest in the set.** He is the reason it is bearable — being outside with him is the only time the game isn't about the **beef**. He is what you were protecting. |
+| **Joshua** | **Doesn't flinch.** Too young to have learned to. Riding, he goes where you point without asking; on the back, he doesn't look away. | **The one the story cannot absorb quietly.** |
+
+### Notes
+
+**Alex and Anthony are deliberate opposites** — commit early against hold until sure —
+without being a comparison of ratings. Either can be wrong on a given **bip**.
+
+**Tyrone is legible to everyone**, including a player who never spent time with him. That
+is a real interaction with
+[ADR 0006](adr/0006-familiarity-changes-legibility-not-competence.md) rather than a
+conflict with it: he is the member a player who knows nobody can still bring.
+
+**James's value sits off the bip.** His trait converted to a cost rather than a capability,
+which is the uncorrelation rule producing itself — bringing him is never the obvious pick,
+losing him is expensive. Omar is the same shape, further out.
+
+**Joshua is Jamal's younger brother**, and he **starts known** — full familiarity from the
+first hour, with no time **outside** required. You cannot not know your own brother.
+
+This looks like the special case the contract forbids and is not one: the contract governs
+which *properties* a member carries, and every member carries the same ones. Joshua's is a
+starting value. [ADR 0005](adr/0005-scarce-time-outside.md)'s concern was that knowing all
+eight equally flattens the roster into a capability comparison, and one pre-known member
+flattens nothing. It also gives the design exactly one death guaranteed to land, which
+hedges ADR 0005's accepted risk that some land flat.
+
+**Joshua is not exempt from death**, and can be lost on the first bip.
+[ADR 0002](adr/0002-permanent-death-shrinking-set.md) forecloses plot armour by name and is
+explicit that once players detect it anywhere, every other death is retroactively
+cheapened. He is the character who will test that commitment hardest, and that is chosen
+rather than inherited. Every scene must also work with the subset where he died nine
+chapters ago.
+
+**Joshua answers [#4](https://github.com/supersnoofer25-cyber/O-block/issues/4)'s open
+question 5** — Jamal is in the tie graph, and this is its strongest edge.
 
 ## Why these names
 
