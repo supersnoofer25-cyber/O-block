@@ -197,6 +197,44 @@ func (s State) Intensity() int {
 	return s.Cycle
 }
 
+// Reading is what Jamal can make out about a companion before a bip, given how well he
+// knows him and which seat he is taking.
+//
+// This is the whole of what familiarity does (ADR 0006). It supplies information and
+// never competence: the same man performs identically whether Jamal has spent five
+// evenings with him or none, and nothing here is reachable from Apply — a reading
+// cannot change an outcome, only what the player knew going in.
+//
+// The levels are deliberately not surfaced. Nothing labels a member a stranger, and
+// nothing counts evenings at the player; the line is simply what Jamal would be able to
+// say about him. ADR 0006 forecloses familiarity as a meter, a tier, or anything
+// readable as progress, and prose that visibly upgrades is the nearest this can come to
+// breaking that — which is why there are three readings and not a ladder of them.
+func (s State) Reading(id MemberID, jamalSeat Seat) string {
+	m, ok := MemberByID(id)
+	if !ok {
+		return ""
+	}
+
+	// His seat is the other one. Every capability is defined in both, so which half
+	// the player sees follows from where Jamal sits and not from who the man is
+	// (ADR 0004, ADR 0009).
+	his := m.Capability.OnBack
+	if jamalSeat == OnBack {
+		his = m.Capability.Riding
+	}
+
+	switch s.Knows(id) {
+	case Stranger:
+		// Not a worse man. A man Jamal cannot read.
+		return m.Capability.Name + ". " + m.Capability.Unread + "."
+	case Close:
+		return m.Capability.Name + ". " + his + ". " + m.Capability.Unprompted + "."
+	default:
+		return m.Capability.Name + ". " + his + "."
+	}
+}
+
 // Companions are the members who could fill the other seat right now: the living, in
 // a stable order (story 12).
 func (s State) Companions() []MemberID {
