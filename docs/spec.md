@@ -3,7 +3,7 @@
 - **Status:** Draft
 - **Date:** 2026-07-24
 - **Sources:** [`CONTEXT.md`](../CONTEXT.md) for vocabulary; ADRs
-  [0001](adr/0001-tactical-agency-strategic-futility.md)–[0012](adr/0012-scarcity-is-the-block-emptying.md)
+  [0001](adr/0001-tactical-agency-strategic-futility.md)–[0013](adr/0013-escalation-plateaus.md)
   for the reasoning behind every decision below.
 
 This document describes *what* the game is. It does not re-argue the decisions — where a
@@ -106,6 +106,22 @@ the end — a structural turn in the middle would be that feedback, delivered ea
 
 Chapters are an authoring structure and are **never surfaced as a count**. No chapter
 number, no progress bar, no position in a sequence.
+
+**Escalation climbs through roughly the first third and then plateaus.** It rises over
+about the first five or six chapters, and the remaining ten sit at the ceiling. The climb
+exists so the player feels the direction once; after that it needs no further
+demonstration. There is no crescendo, no darkest hour, and no worst night — chapter sixteen
+is no more intense than chapter eight.
+([ADR 0013](adr/0013-escalation-plateaus.md))
+
+The plateau is the statement: *this is how it is now*, which is what **beef** is defined to
+be. It also keeps the player's own losses legible. When the back half is harder it is
+harder because there are fewer of them — and with the dial held still, that is the only
+available reading. A rising curve would give the player something other than their own
+choices to attribute the outcome to, which §1 cannot afford.
+
+What the player experiences still worsens, because two things keep moving under a constant
+threat: the set shrinks, and the Block empties (§5).
 
 ## 4. Cast
 
@@ -243,6 +259,23 @@ which is the specific failure mode ADR 0001 warns against. Skill must save *a na
 person*, visibly, with a one-step causal line: you covered the stairwell, so Marcus made
 it home.
 
+**Tuning target: roughly one bip in four costs the player their companion.** Against
+sixteen chapters ([ADR 0008](adr/0008-flat-chapter-sequence.md)) that is about four
+deaths, so the common outcome is a set cut in half — with nobody lost and everybody lost
+both reachable and both rare.
+
+**This is not a probability the game rolls.** There is no dice throw deciding whether a
+member comes home. It is the *outcome encounter tuning should produce for a competent
+player*, and skill moves it in both directions: someone who plays well finishes with more
+of the set alive, someone who struggles finishes with fewer. That is ADR 0001's individual
+agency doing exactly what it promises — playing well saves the person in front of you —
+and it means the nine-way spread of surviving rosters
+([ADR 0007](adr/0007-zero-is-an-ending-not-a-fail-state.md)) comes from how the player
+played rather than from variance.
+
+The number and the chapter count are a single dial. Sixteen chapters at one in four and
+thirty-two at one in eight produce the same four deaths, so neither can be tuned alone.
+
 ### 6.4 Return
 
 The player returns to Outside, possibly with one fewer member of the set. The loop repeats.
@@ -339,6 +372,9 @@ contradicts it.
 - **Counters, meters, clocks, day counts and visit allowances** outside; any surfaced
   "time remaining"; any notification that a member has left; randomised departures
   (ADR 0012)
+- **An accelerating escalation curve**, a final-act intensity spike, a darkest hour, any
+  chapter authored as the worst one, and difficulty that rises with chapter number
+  (ADR 0013)
 - **Manual saves** (§7)
 - **Real people and real events** from O-Block (§2)
 
@@ -374,9 +410,7 @@ None of these threaten what is settled above. All need answers before production
 
 1. **Engine.** No engine chosen; no code exists. Deliberately deferred — the decisions
    above are engine-agnostic. Warrants its own ADR when taken.
-2. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
-   fixes that it is monotonic and that winning still escalates. Its shape remains
-   deliberately undecided.
-3. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
-   chapter count — ADR 0008 makes the two a single knob, since together they determine
-   whether an empty set stays reachable and unlikely.
+2. **Encounter tuning.** The target is set — roughly one bip in four costs the player their
+   companion, against sixteen chapters (§6.3). Whether encounters as built actually produce
+   that for a competent player can only be answered by playing them, and the target moves
+   with the chapter count rather than independently.
