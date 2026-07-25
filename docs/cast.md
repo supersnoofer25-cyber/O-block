@@ -22,14 +22,14 @@ So each man is one trait that shows up whichever seat he takes.
 
 | | Capability | Cost of loss |
 |---|---|---|
-| **Alex** | **Doesn't hesitate.** On the back he fires first, before you've decided this is happening. Riding, he commits to the approach — closer than you'd have chosen. | *unauthored* |
+| **Alex** | **Doesn't hesitate.** On the back he fires first, before you've decided this is happening. Riding, he commits to the approach — closer than you'd have chosen. | **He has a little sister.** After Alex she stops coming outside. She is still on the Block; you just don't see her any more. |
 | **Tyrone** | **Won't shut up.** Riding, he's calling what's ahead; on the back, what's behind. You always know what he's seeing. | *unauthored* |
 | **Anthony** | **The one who says no.** Riding, he takes the careful exit. On the back, he holds until he's sure. | *unauthored* |
 | **James** | **Doesn't leave early.** On the back he keeps firing until it's actually done. Riding, he won't pull out while anyone is still exposed. | **After James, going out is harder for everyone.** Permanently. |
 | **Daquavion** | **Moves first.** Reacting, not dodging — when it goes wrong he is already moving. | **He has a newborn.** After Daquavion, his girl takes the baby off the Block. Two people who were part of the place are gone from it. |
 | **Marcus** | **Knows the way out.** Riding, he takes exits you wouldn't have found. On the back, he's telling you where to go before you've asked. | **He works on cars.** After Marcus they stop running — not his, everyone's. The Block loses the man who kept it moving. |
 | **Omar** | **Acts like nothing is happening.** Riding, he never tenses up. On the back, he's the calmest gun in the set, because he hasn't quite registered that it's real. | **The highest in the set.** He is the reason it is bearable — being outside with him is the only time the game isn't about the **beef**. He is what you were protecting. |
-| **Joshua** | **Doesn't flinch.** Too young to have learned to. Riding, he goes where you point without asking; on the back, he doesn't look away. | **The one the story cannot absorb quietly.** |
+| **Joshua** | **Doesn't flinch.** Too young to have learned to. Riding, he goes where you point without asking; on the back, he doesn't look away. | **He lives with Jamal.** After Joshua, the house Jamal comes back to is empty. |
 
 ### Notes
 
@@ -48,6 +48,17 @@ are right sometimes.
 already moving when it goes wrong — and he has the most waiting for him. Nothing about
 *moves first* tells you about the newborn, so a player optimising the roster cannot see the
 price coming. Bringing him is the decision the whole game is about.
+
+**Joshua's cost is the only one paid in Jamal's own space.** Every other cost is observed
+elsewhere on the Block; his cannot be routed around by not going somewhere, and it is paid
+at the start of every chapter for the rest of the campaign. It also partly answers
+[#4](https://github.com/supersnoofer25-cyber/O-block/issues/4)'s open question 4 — a cost
+of loss does not remove a location, it hollows one. That is likely the general answer.
+
+**Alex and Daquavion are deliberately differentiated.** Both are a man dying and a
+dependent going, which risks the player being unable to tell whose absence caused what
+(story 26). They differ in *what* goes, not who: Daquavion's girl and baby leave the Block
+entirely; Alex's sister stays and stops coming **outside**.
 
 **Marcus's cars must not read as available transport.** ADR 0004 forecloses cars as a means
 of **bipping out**, and putting a mechanic on the Block invites *"why can't I take one?"*
