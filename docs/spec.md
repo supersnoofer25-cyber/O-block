@@ -127,6 +127,12 @@ recognisable in either seat, and one **cost of loss**, drawn from what he is out
 than from what he does on a bip. Neither is ever a number.
 ([ADR 0009](adr/0009-behaviour-and-absence-never-a-number.md))
 
+They are also tied to each other in four pairs — each man in exactly one — so that a death
+changes someone rather than only removing a name. Ripples reach direct ties and stop there.
+The ties are harvested from what the men already are rather than invented to reach a
+number, and the graph is kept sparse because eight men fully connected is twenty-eight
+relationships to write in both directions and in any order of deaths.
+
 ## 5. Mode: Outside
 
 On foot on the Block. No bike, no weapons drawn, no destination. This is where the player

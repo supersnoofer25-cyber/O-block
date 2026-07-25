@@ -72,10 +72,40 @@ optimising the roster a way to rank it. The shape to aim for is `spec.md` §4's 
 one who never panics is the one whose mother feeds me* — where the two facets are
 unrelated. Tyrone landed on that line almost exactly, except that it is him.
 
-**Anthony's job needs Marcus's cars.** This tie was not authored; it fell out of the two
-men. [#4](https://github.com/supersnoofer25-cyber/O-block/issues/4)'s open question 3 asks
-how many ties the graph should carry, and this is the first candidate — worth preferring
-ties that emerge this way over ties invented to fill a quota.
+## Ties
+
+A tie is something between two members, so that when one dies the other changes. Without
+them the eight are eight strangers who live near each other; with them a death ripples
+instead of removing a name.
+
+**Four ties, each man in exactly one.** Eight men fully connected is twenty-eight pairs,
+each needing an authored consequence in both directions and in any order of deaths — the
+combinatorial load [ADR 0002](adr/0002-permanent-death-shrinking-set.md) names as the
+project's principal scope risk. Four pairs is eight ripples to write, which is
+shippable.
+
+**Every tie is harvested, not invented.** Each of these was already true given what the two
+men are; none was added to reach a number. Ties invented to fill a quota read as
+constructed, and cost writing that the emergent ones do not.
+
+| Tie | Why it was already there |
+|---|---|
+| **Anthony — Marcus** | Anthony has a job off the Block. Marcus keeps the cars running. Anthony needs a car to get to work. |
+| **Tyrone — James** | Tyrone sells food. James keeps up the church, which is where the Block gathers. He feeds people where they come together. |
+| **Omar — Joshua** | Omar has the hoop. Joshua is the youngest. The kid is where the game is. |
+| **Alex — Daquavion** | The two with someone waiting at home — a little sister, a newborn. They are the ones who leave early. |
+
+**Alex and Daquavion were the near-collision, and the tie is what fixes it.** Both costs
+read as *a man dies, a dependent goes*, which risked story 26's requirement that each loss
+be attributable. Pairing them deliberately turns the resemblance into the structure: they
+are alike because they are the two with someone at home, and that is the thing between them.
+
+**Ripples reach direct ties only and stop there** (story 32). Marcus dying changes Anthony;
+it does not change Tyrone. A single death cannot cascade into rewriting the set.
+
+**Jamal's ties are a separate axis.** Every member has a relationship to him — that is
+story 1, and it is not what this graph counts. Joshua is in both: tied to Omar here, and
+Jamal's brother besides.
 
 **A cost hollows a place; it never removes one.** James's church stands and is used less.
 Joshua's house is still there and is empty. Omar's hoop is still up. If costs could delete
