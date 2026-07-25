@@ -16,7 +16,7 @@ Terms in **bold** are defined in `CONTEXT.md` and are used strictly.
 
 **Jamal** is a native of **the Block** — **Roundhill**, a fictional South Side Chicago
 block. His **set** — the eight people he grew up alongside — is in **beef** with a **rival
-set**. He is trying to protect them.
+set**, **Orinda**. He is trying to protect them.
 
 He cannot. Every retaliation he wins produces the reason for the next one, and the set
 gets smaller. He is not told this, and the game never states it. He experiences it.
@@ -327,9 +327,6 @@ None of these threaten what is settled above. All need answers before production
 5. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
    fixes that it is monotonic and that winning still escalates. Its shape remains
    deliberately undecided.
-6. **The rival set's block, and therefore its name.** Now a gap rather than an omission:
-   ours is named after its block, and a named set facing an unnamed one reads oddly the
-   moment anyone has to refer to them out loud.
-7. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
+6. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
    chapter count — ADR 0008 makes the two a single knob, since together they determine
    whether an empty set stays reachable and unlikely.

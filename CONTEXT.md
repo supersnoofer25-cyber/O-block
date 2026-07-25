@@ -60,6 +60,11 @@ name is a holdover, not a statement of setting.
 The second seat on **the bike** — the passenger, and the one who shoots. Either the
 player or a member of the **set** occupies it; whoever is not on the back is riding.
 
+## Orinda
+The block the **rival set** comes from, and by the same inheritance as **Roundhill** the
+name of that set. Invented, like ours, and never depicted with more structure than our own
+block has.
+
 ## Outside
 The time between bips, spent on foot on **the Block** among the **set**. The game's other
 mode, and its opposite: no bike, no weapons drawn, no destination. "Being outside" is
@@ -71,10 +76,10 @@ the player each time. Members differ from one another by relationship and by wha
 loss would cost — never by combat class or loadout.
 
 ## Rival Set
-Another set, from another block, currently in **beef** with ours. Named after its own block
-exactly as ours is. Structurally identical to our own set — same size, same lack of
-hierarchy, same logic. Never written as an organization with plans; it is a mirror, not an
-antagonist faction.
+Another set, from another block, currently in **beef** with ours — **Orinda**, named after
+its block exactly as ours is. Structurally identical to our own set — same size, same lack
+of hierarchy, same logic. Never written as an organization with plans; it is a mirror, not
+an antagonist faction.
 
 ## Roundhill
 The name of **the Block**, and by inheritance the name of the **set** that comes from it —
