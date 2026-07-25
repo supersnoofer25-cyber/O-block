@@ -25,10 +25,10 @@ So each man is one trait that shows up whichever seat he takes.
 | **Alex** | **Doesn't hesitate.** On the back he fires first, before you've decided this is happening. Riding, he commits to the approach — closer than you'd have chosen. | *unauthored* |
 | **Tyrone** | **Won't shut up.** Riding, he's calling what's ahead; on the back, what's behind. You always know what he's seeing. | *unauthored* |
 | **Anthony** | **The one who says no.** Riding, he takes the careful exit. On the back, he holds until he's sure. | *unauthored* |
-| **James** | *unauthored* | **After James, going out is harder for everyone.** Permanently. |
+| **James** | **Doesn't leave early.** On the back he keeps firing until it's actually done. Riding, he won't pull out while anyone is still exposed. | **After James, going out is harder for everyone.** Permanently. |
 | **Daquavion** | **Moves first.** Reacting, not dodging — when it goes wrong he is already moving. | *unauthored* |
 | **Marcus** | **Knows the way out.** Riding, he takes exits you wouldn't have found. On the back, he's telling you where to go before you've asked. | *unauthored* |
-| **Omar** | *unauthored* | **The highest in the set.** He is the reason it is bearable — being outside with him is the only time the game isn't about the **beef**. He is what you were protecting. |
+| **Omar** | **Acts like nothing is happening.** Riding, he never tenses up. On the back, he's the calmest gun in the set, because he hasn't quite registered that it's real. | **The highest in the set.** He is the reason it is bearable — being outside with him is the only time the game isn't about the **beef**. He is what you were protecting. |
 | **Joshua** | **Doesn't flinch.** Too young to have learned to. Riding, he goes where you point without asking; on the back, he doesn't look away. | **The one the story cannot absorb quietly.** |
 
 ### Notes
@@ -41,9 +41,15 @@ is a real interaction with
 [ADR 0006](adr/0006-familiarity-changes-legibility-not-competence.md) rather than a
 conflict with it: he is the member a player who knows nobody can still bring.
 
-**James's value sits off the bip.** His trait converted to a cost rather than a capability,
-which is the uncorrelation rule producing itself — bringing him is never the obvious pick,
-losing him is expensive. Omar is the same shape, further out.
+**James is set against Marcus.** Marcus knows the way out; James won't take it yet. Both
+are right sometimes.
+
+**Costs of loss come from what a man is on the Block, not from what he does on a bip.**
+A capability is exercised **bipping out**; a cost of loss is paid **outside**. Deriving one
+from the other collapses them into a single fact about a person and hands a player
+optimising the roster a way to rank it. The shape to aim for is `spec.md` §4's own — *the
+one who never panics is the one whose mother feeds me* — where the two facets are
+unrelated.
 
 **Joshua is Jamal's younger brother**, and he **starts known** — full familiarity from the
 first hour, with no time **outside** required. You cannot not know your own brother.
