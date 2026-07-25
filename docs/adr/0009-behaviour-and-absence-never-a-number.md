@@ -1,6 +1,6 @@
 # 0009. A member is one behaviour on a bip and one absence on the Block, and neither is a number
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-07-25
 
 ## Context

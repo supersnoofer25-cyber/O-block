@@ -1,6 +1,6 @@
 # 0007. The campaign has one ending; an empty set reaches it early, and never as a failure
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-07-24
 
 ## Context

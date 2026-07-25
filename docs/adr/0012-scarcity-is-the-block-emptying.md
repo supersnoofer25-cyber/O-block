@@ -1,6 +1,6 @@
 # 0012. Scarcity is the Block emptying, not a budget the player spends
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-07-25
 
 ## Context

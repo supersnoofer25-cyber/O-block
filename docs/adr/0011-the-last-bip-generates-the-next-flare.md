@@ -1,6 +1,6 @@
 # 0011. The last bip generates the next flare, and a flare kills people who are not in the set
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-07-25
 
 ## Context

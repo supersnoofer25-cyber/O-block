@@ -1,6 +1,6 @@
 # 0008. The campaign is a flat, fixed sequence of chapters, and a chapter is one budget of time outside and the bip that ends it
 
-- **Status:** Proposed
+- **Status:** Accepted
 - **Date:** 2026-07-24
 
 ## Context
