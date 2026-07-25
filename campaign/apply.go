@@ -152,6 +152,11 @@ func applyBipOut(s State, d BipOut) (State, error) {
 		out.Alive = remove(out.Alive, d.Companion)
 	}
 
+	// What happened here is what the Block answers next chapter (ADR 0011). Recorded
+	// rather than derived: once the roster has shortened there is no way to read back
+	// out of it whether tonight cost someone or whether everyone came home.
+	out.LastBip = lastBip{Happened: true, Lost: !d.CompanionReturned, Who: d.Companion}
+
 	out.Chapter++
 
 	switch {

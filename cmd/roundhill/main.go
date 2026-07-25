@@ -14,6 +14,14 @@
 //   - No survivor tally at the ending. ADR 0007 forbids it.
 //   - Nothing frames a death as failure. ADR 0002 forbids it.
 //
+// Each chapter opens with a flare — why tonight — which comes from the player's last
+// bip and from nothing else (ADR 0011). Where each man is, and why he goes in when he
+// goes, change chapter to chapter, which is the ambient authoring ADR 0012 asks for and
+// never got. Both exist because the first version of this harness had neither: sixteen
+// structurally identical chapters, one fixed line per man, and no reason to go. It read
+// exactly as flat as ADR 0008 and ADR 0013 warned it would, which told us nothing about
+// the design, because the variation those decisions rest on had not been written yet.
+//
 // The encounter is not simulated. This harness rolls for whether a companion comes
 // home and hands the result to the module, which is exactly the boundary issue #3
 // draws — in the real game that result comes from how the player played.
@@ -61,19 +69,34 @@ func (g *game) run() {
 	fmt.Println()
 
 	for g.state.Running() {
+		g.flare()
 		g.evening()
 		g.bip()
 	}
 	g.ending()
 }
 
+// flare is why tonight, and it comes from what the player did last time (ADR 0011).
+// It reaches them as news, from people, before they are properly outside — never as a
+// briefing, and never as an instruction to go and do something about it.
+func (g *game) flare() {
+	f := campaign.FlareFor(g.state)
+	fmt.Println(wrap(f.News))
+	if f.Dead != "" {
+		fmt.Println()
+		fmt.Println(wrap(f.Dead))
+	}
+	fmt.Println()
+}
+
 // evening is time outside: the player spends it until there is nobody left out.
 func (g *game) evening() {
 	for len(g.state.Outside) > 0 {
+		chapter := g.state.Chapter
 		fmt.Println("Outside tonight —")
 		for _, id := range g.state.Outside {
 			m, _ := campaign.MemberByID(id)
-			fmt.Printf("  %-10s %s\n", m.Name, lower(m.Activity))
+			fmt.Printf("  %-10s %s\n", m.Name, lower(campaign.Tonight(id, chapter)))
 		}
 
 		with := g.pick("Who do you spend the evening with?", g.state.Outside)
@@ -87,12 +110,19 @@ func (g *game) evening() {
 		g.state = next
 
 		m, _ := campaign.MemberByID(with)
-		fmt.Printf("\nYou spend the evening with %s, %s.\n", m.Name, lower(m.Activity))
+		fmt.Printf("\nYou spend the evening with %s, %s.\n", m.Name, lower(campaign.Tonight(with, chapter)))
 
 		// The others carried on without you. Nothing was deducted — you were
-		// somewhere else (ADR 0012).
+		// somewhere else (ADR 0012). Each one goes in for his own reason, because a
+		// bare list of who vanished reads as a rule being enforced, which is the way
+		// this decision fails if it fails.
 		if gone := missing(before, g.state.Outside, with); len(gone) > 0 {
-			fmt.Printf("%s went in while you were there.\n", names(gone))
+			var parts []string
+			for _, id := range gone {
+				left, _ := campaign.MemberByID(id)
+				parts = append(parts, left.Name+" "+campaign.WentIn(id, chapter))
+			}
+			fmt.Println(wrap(strings.Join(parts, ". ") + "."))
 		}
 		fmt.Println()
 	}
@@ -148,7 +178,7 @@ func (g *game) bip() {
 		fmt.Printf("You both come back.\n")
 	} else {
 		// Never framed as failure. The story absorbs it (ADR 0002).
-		fmt.Printf("%s doesn't come home.\n\n%s\n", m.Name, m.CostOfLoss)
+		fmt.Printf("%s doesn't come home.\n\n%s\n", m.Name, wrap(m.CostOfLoss))
 		if tie, ok := campaign.MemberByID(m.Tie); ok && g.state.IsAlive(tie.ID) {
 			fmt.Printf("%s doesn't say anything.\n", tie.Name)
 		}
@@ -170,7 +200,7 @@ func (g *game) ending() {
 	}
 	for _, m := range campaign.TheSet {
 		if !g.state.IsAlive(m.ID) {
-			fmt.Println(m.CostOfLoss)
+			fmt.Println(wrap(m.CostOfLoss))
 		}
 	}
 	fmt.Println()
@@ -246,20 +276,27 @@ func missing(before, after []campaign.MemberID, except campaign.MemberID) []camp
 	return gone
 }
 
-func names(ids []campaign.MemberID) string {
-	var out []string
-	for _, id := range ids {
-		m, _ := campaign.MemberByID(id)
-		out = append(out, m.Name)
+// wrap breaks prose to a readable measure. The flares are sentences rather than the
+// labels everything else here prints, and a terminal will run them to whatever width
+// the window happens to be.
+func wrap(s string) string {
+	const width = 76
+	var b strings.Builder
+	n := 0
+	for _, w := range strings.Fields(s) {
+		switch {
+		case n == 0:
+		case n+1+len(w) > width:
+			b.WriteString("\n")
+			n = 0
+		default:
+			b.WriteString(" ")
+			n++
+		}
+		b.WriteString(w)
+		n += len(w)
 	}
-	switch len(out) {
-	case 0:
-		return ""
-	case 1:
-		return out[0]
-	default:
-		return strings.Join(out[:len(out)-1], ", ") + " and " + out[len(out)-1]
-	}
+	return b.String()
 }
 
 func lower(s string) string {

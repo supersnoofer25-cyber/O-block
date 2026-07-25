@@ -78,6 +78,19 @@ type familiarity struct {
 	Evenings int      `json:"evenings"`
 }
 
+// lastBip is what happened the last time Jamal went out.
+//
+// Tonight's reason to go comes from this and from nothing else (ADR 0011), which is
+// why the module has to remember it: with every external flare generator foreclosed —
+// no schedule, no escalation manager, no quest-giver — the previous bip is the only
+// thing left that could cause the next one. Its zero value means the campaign has not
+// had a bip yet, and chapter one needs no special case because the beef is inherited.
+type lastBip struct {
+	Happened bool     `json:"happened"`
+	Lost     bool     `json:"lost"`
+	Who      MemberID `json:"who"`
+}
+
 // State is the whole campaign. Every field is exported and JSON-tagged so the state
 // round-trips (story 26), and every collection is a slice in a stable order so that
 // identical decisions reproduce identical state (story 28) — Go randomises map
@@ -99,6 +112,9 @@ type State struct {
 	// Cycle counts completed bips. It advances on every bip regardless of outcome
 	// (stories 16, 17) and nothing reduces it (story 18).
 	Cycle int `json:"cycle"`
+
+	// LastBip is what the next flare is made of (ADR 0011).
+	LastBip lastBip `json:"last_bip"`
 
 	End EndReason `json:"end"`
 }
