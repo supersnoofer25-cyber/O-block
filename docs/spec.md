@@ -160,6 +160,26 @@ populated. Learned the way a resident learns a place. No quest markers, no objec
 Set members are simply somewhere in it doing something; the player finds them by knowing
 where they tend to be.
 
+**What time outside consists of.** Not conversation. Each member is doing a particular
+thing in a particular place, and spending time with him means doing it alongside him —
+under a car with Marcus, at the hoop with Omar, up on the church roof with James. This is
+the *doing something* and the *where they tend to be* of the paragraph above, made
+concrete: there are eight distinct things to do outside, and which of them the player does
+changes every chapter because who they choose changes. The variation comes from the
+player's choice rather than competing with it, which is what a per-chapter task list would
+do. See [`cast.md`](cast.md) for the eight.
+
+**Each activity is the thing that member's death will take away.** You played at Omar's
+hoop for six chapters, and then Omar is dead and nobody plays. The player recognises the
+**cost of loss** because they were there for it — which is the mechanism by which
+familiarity gates recognition of a cost (§4), and the reason the activity is not free
+choice: it is rooted in the man's cost-of-loss material or it does not do this job.
+
+**Per-chapter variation comes from the flare, not from tasks.** After a bad one there is a
+funeral, or the Block is subdued, or people are indoors. That changes what is happening
+outside without assigning **Jamal** an objective, and the player is never required to
+engage with it.
+
 **Scarcity.** Time outside is limited. The player cannot come to know all eight. Who they
 spend it with *is* the characterization mechanic — they will know three or four well and
 the rest barely, and the ones they know are the ones they cannot afford to lose.
