@@ -3,7 +3,7 @@
 - **Status:** Draft
 - **Date:** 2026-07-24
 - **Sources:** [`CONTEXT.md`](../CONTEXT.md) for vocabulary; ADRs
-  [0001](adr/0001-tactical-agency-strategic-futility.md)–[0011](adr/0011-the-last-bip-generates-the-next-flare.md)
+  [0001](adr/0001-tactical-agency-strategic-futility.md)–[0012](adr/0012-scarcity-is-the-block-emptying.md)
   for the reasoning behind every decision below.
 
 This document describes *what* the game is. It does not re-argue the decisions — where a
@@ -167,8 +167,28 @@ player chooses *when* to go, not *whether* — and nothing expires to make them.
 to do outside simply run out, and going is what is left.
 ([ADR 0008](adr/0008-flat-chapter-sequence.md))
 
-This is how the requirement above is met: the player is never pushed by a countdown, only
-by having spent what they had.
+**Scarcity is availability, not quantity.** The player never spends anything. Everyone
+living is outside when a chapter opens; spending real time with one member means the others
+carry on without you, and people go in. You were with Marcus, so you were not there when
+Omar went upstairs. ([ADR 0012](adr/0012-scarcity-is-the-block-emptying.md))
+
+The chapter ends when there is nobody left outside. The Block goes quiet, the player is
+standing on it alone, and going is the only thing left to do.
+
+**Nothing is ever counted.** No allowance, no clock, no meter, no day count, no time
+remaining, and no notification that someone has gone. The player sees who is still out
+because they can see the Block — which is what a resident knows, not a readout. Departures
+are deterministic, since [issue #3](https://github.com/supersnoofer25-cyber/O-block/issues/3)
+story 28 requires reproducible state, but they are never announced and autosave-only denies
+the repetition that would teach the pattern.
+
+The opening is the exception: nobody leaves, because the player must meet all eight within
+the first hour. It is the one time the Block is full, and it is the picture every later
+chapter erodes.
+
+This is how the requirement above is met — not by dressing a counter in fiction, but by
+having no quantity to count. Under uncertainty about who will still be out, who the player
+goes to *first* is who they care about, and no other reading is available.
 
 ## 6. Mode: Bipping out
 
@@ -310,6 +330,9 @@ contradicts it.
 - **External flare generators**, escalation managers and quest-givers; flares that kill
   set members, damage any part of a cost of loss, or produce anonymous casualties
   (ADR 0011)
+- **Counters, meters, clocks, day counts and visit allowances** outside; any surfaced
+  "time remaining"; any notification that a member has left; randomised departures
+  (ADR 0012)
 - **Manual saves** (§7)
 - **Real people and real events** from O-Block (§2)
 
@@ -345,14 +368,9 @@ None of these threaten what is settled above. All need answers before production
 
 1. **Engine.** No engine chosen; no code exists. Deliberately deferred — the decisions
    above are engine-agnostic. Warrants its own ADR when taken.
-2. **How scarcity is expressed.** Narrowed by ADR 0008, not closed. The *unit* is settled —
-   one chapter is one budget of time outside — and so is the fact that the budget running
-   out, rather than a clock, is what sends the player. What that budget is made of in the
-   fiction, and how a player perceives it running low without perceiving a timer, is still
-   open. This is the remaining half of ADR 0005's hardest requirement.
-3. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
+2. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
    fixes that it is monotonic and that winning still escalates. Its shape remains
    deliberately undecided.
-4. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
+3. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
    chapter count — ADR 0008 makes the two a single knob, since together they determine
    whether an empty set stays reachable and unlikely.
