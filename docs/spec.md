@@ -14,7 +14,7 @@ Terms in **bold** are defined in `CONTEXT.md` and are used strictly.
 
 ## 1. Premise
 
-**Jamal** is a native of **the Block**, a fictional South Side Chicago block. His **set** —
+**Jamal** is a native of **the Block** — **Roundhill**, a fictional South Side Chicago block. His **set** —
 the eight people he grew up alongside — is in **beef** with a **rival set**. He is trying
 to protect them.
 
@@ -29,9 +29,12 @@ them. ([ADR 0001](adr/0001-tactical-agency-strategic-futility.md))
 ## 2. Setting
 
 The Block is invented — its name, its residents, and everything that happens on it. It is
-recognizably drawn from the real **O-Block** in geography, architecture, and cultural
-texture, and the drill-scene influence lives in music, dialogue, and camera language
-rather than in real people's names.
+called **Roundhill**, and it is recognizably drawn from the real **O-Block** in geography,
+architecture, and cultural texture, with the drill-scene influence living in music,
+dialogue, and camera language rather than in real people's names.
+
+*Roundhill* is the proper noun. "The Block" remains what the game and its residents call
+it in ordinary speech, and is the term used throughout this document.
 
 No real person is a character in this game. No real event is depicted. This is a firm
 constraint, not a preference.
@@ -310,21 +313,20 @@ None of these threaten what is settled above. All need answers before production
 
 1. **Engine.** No engine chosen; no code exists. Deliberately deferred — the decisions
    above are engine-agnostic. Warrants its own ADR when taken.
-2. **The Block's fictional name.** Unnamed.
-3. **What started the beef.** Undefined. Note that **beef** is defined as having no start
+2. **What started the beef.** Undefined. Note that **beef** is defined as having no start
    date every participant would name the same way — so this may be answered as
    deliberately contested rather than as a fact.
-4. **How scarcity is expressed.** Narrowed by ADR 0008, not closed. The *unit* is settled —
+3. **How scarcity is expressed.** Narrowed by ADR 0008, not closed. The *unit* is settled —
    one chapter is one budget of time outside — and so is the fact that the budget running
    out, rather than a clock, is what sends the player. What that budget is made of in the
    fiction, and how a player perceives it running low without perceiving a timer, is still
    open. This is the remaining half of ADR 0005's hardest requirement.
-5. **How the beef flares.** What generates a reason to bip out. The other half of this
+4. **How the beef flares.** What generates a reason to bip out. The other half of this
    question — whether the player can decline indefinitely — is settled by ADR 0008: they
    cannot.
-6. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
+5. **The escalation curve.** ADR 0008 gave it a domain to be drawn across, and ADR 0001
    fixes that it is monotonic and that winning still escalates. Its shape remains
    deliberately undecided.
-7. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
+6. **Loss rate per bip.** Tuning rather than decision, but it must be tuned jointly with
    chapter count — ADR 0008 makes the two a single knob, since together they determine
    whether an empty set stays reachable and unlikely.

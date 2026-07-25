@@ -20,10 +20,10 @@ The project's standing term for the act — we do not say "raid," "mission," or 
 as a noun as well: *a bip* is one such outing.
 
 ## The Block
-The fictional South Side Chicago block where *Our Block* takes place. Recognizably drawn
-from **O-Block** in geography, architecture, and cultural texture, but its name, its
-residents, and everything that happens on it are invented. When we say "the Block"
-unqualified, we always mean the fictional one — the game's setting.
+The fictional South Side Chicago block where *Our Block* takes place, named **Roundhill**.
+Recognizably drawn from **O-Block** in geography, architecture, and cultural texture, but
+its name, its residents, and everything that happens on it are invented. When we say "the
+Block" unqualified, we always mean the fictional one — the game's setting.
 
 ## Capability
 What a member of the **set** is like on a **bip**. One behaviour, characteristic of him,
@@ -74,6 +74,10 @@ loss would cost — never by combat class or loadout.
 Another set, from another block, currently in **beef** with ours. Structurally identical
 to our own set — same size, same lack of hierarchy, same logic. Never written as an
 organization with plans; it is a mirror, not an antagonist faction.
+
+## Roundhill
+The name of **the Block**. The proper noun; "the Block" remains what we and its residents
+call it in ordinary speech.
 
 ## Set
 The loose, block-level affiliation the player belongs to — the people who grew up on
