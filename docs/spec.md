@@ -431,8 +431,15 @@ prep layer means a thin game.
 
 None of these threaten what is settled above. All need answers before production.
 
-1. **Engine.** No engine chosen; no code exists. Deliberately deferred — the decisions
-   above are engine-agnostic. Warrants its own ADR when taken.
+1. **Engine.** ~~Deferred.~~ Settled: Unreal 5, PC first
+   ([ADR 0014](adr/0014-unreal-5-on-pc.md)), chosen on this design's character-behaviour
+   scope rather than on rendering. Deferring it was cheap because everything above is
+   engine-agnostic, and it was taken when the remaining open question stopped being
+   answerable without an engine.
+
+   Two things this section used to say are now out of date. Code exists — the `campaign`
+   module and `cmd/roundhill`, both Go — and ADR 0014 ports the module to C++ rather than
+   binding it, keeping the test suite as the specification.
 2. **Encounter tuning.** The target is set — roughly one bip in three costs the player their
    companion, against twelve chapters (§6.3). Whether encounters as built actually produce
    that for a competent player can only be answered by playing them, and the target moves
