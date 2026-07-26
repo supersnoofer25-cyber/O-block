@@ -15,6 +15,7 @@ exists, and the decisions are binding. Read before building.
 | `docs/cast.md` | The eight, in prose. `campaign/cast.go` is that file as data. |
 | `CONTEXT.md` | The glossary. Terms have exact meanings — use them strictly. |
 | `campaign/` | Headless Go rules module. Pure, engine-agnostic, no rendering, no I/O. |
+| `cpp/campaign/` | C++ port of the above (ADR 0014). Same seam, same story-numbered tests. |
 | `cmd/roundhill/` | Text prototype. Not the game — a harness for answering design questions cheaply. |
 
 ## Commands
@@ -29,6 +30,19 @@ go run ./cmd/roundhill -auto -seed 7 # watch a whole campaign play itself
 `-auto` plays without input, `-seed N` fixes who comes home, `-loss N` is one companion
 lost in N bips. Two runs at the same seed must produce byte-identical output — story 28
 requires determinism, so nothing may roll at render time.
+
+```bash
+# from cpp/campaign, see cpp/campaign/README.md for why -static matters here
+clang++ -std=c++20 -Wall -Wextra -O0 -g -static \
+    state.cpp cast.cpp apply.cpp outside.cpp flare.cpp persist.cpp campaign_test.cpp \
+    -o campaign_test.exe
+./campaign_test.exe
+```
+
+On Windows, `clang++` must be the **LLVM-MinGW** build specifically (self-contained
+linker and runtime), not plain LLVM — plain LLVM's `clang++` defaults to the MSVC ABI
+and cannot link without Visual Studio's linker and Windows SDK libs, which this machine
+does not have. See "Toolchain" below.
 
 ## How to work here
 
@@ -75,20 +89,41 @@ tuning number, which needs an engine to test (see below).
   0006) gates how much warning the player gets, not the threat itself.
   `campaign.BipOut.CompanionReturned bool` is unchanged — nothing downstream needs more
   than that, so the seam's shape was already right.
+- **`campaign` is ported to C++** (`cpp/campaign/`, ADR 0014). All 28 stories pass.
+  Two of the Go suite's checks (stories 11 and 14, originally `reflect`-based) became
+  `static_assert`s in `campaign.hpp` instead — stronger, since they fail the build
+  rather than a test run. Everything else is a direct translation; see
+  `cpp/campaign/README.md` for the handful of naming changes C++ needed that Go didn't.
 - No open PRs, no open issues, `main` green.
 
 ### The next decision
 
-**Port `campaign` to C++** (ADR 0014 committed to porting rather than bridging — builds and
-tests with `clang++` alone, no Unreal needed). The seam is now designed, so the port is no
-longer at risk of baking in the wrong shape. After that, the encounter itself — the tally,
-the denial mechanics, ADR 0015 describes but does not build — is Unreal-side work and needs
-the engine.
+**Build the encounter in Unreal.** The rules module now exists in both languages and
+ADR 0015 describes what the encounter has to measure — a per-bip danger tally, denied
+by the player's own skill, never a roll. What doesn't exist yet is Unreal itself: the
+engine has never been installed or opened on any machine this project has run on. That's
+the actual next step, not a design question — confirm the engine is present, then start
+wiring `cpp/campaign`'s `Apply` seam to something that can produce a `CompanionReturned`
+the way ADR 0015 describes, rather than roll for it.
 
-### Picking this up on another machine
+### Toolchain — what's installed where this was last worked on
 
-Neither Unreal nor a Go toolchain was found on the machine this ADR was written on — no
-`UnrealEditor.exe`, no Epic Games Launcher, no `go` on `PATH` anywhere searched. Confirm
-both are present before starting the C++ port or running `go test ./...`. Nothing is
-half-finished — the tree is clean and every branch is merged, so there is no work-in-progress
-to recover, only tooling to install.
+Confirm all of this is present before continuing on a new machine; none of it was here
+when this session started, and installing it was itself part of the work.
+
+- **Go** (`GoLang.Go` via `winget`) — for `campaign` and `cmd/roundhill`.
+- **LLVM** (`LLVM.LLVM` via `winget`) — plain clang tools, but its `clang++` targets the
+  MSVC ABI and **cannot link** without Visual Studio's linker/SDK, which this machine
+  does not have. Don't use this one to build `cpp/campaign`.
+- **LLVM-MinGW** (`MartinStorsjo.LLVM-MinGW.UCRT` via `winget`) — a second, separate
+  `clang++` that's self-contained (own linker, own runtime). This is the one
+  `cpp/campaign` actually builds with. It's a large archive and extraction is slow
+  (likely real-time antivirus scanning many small files) — budget several minutes, not
+  seconds, and don't mistake the wait for a hang.
+- **Unreal** — still not installed anywhere. Needed for the actual next step above.
+
+Neither Bash nor PowerShell in this environment picks up a `winget`-installed program's
+new `PATH` entry automatically mid-session; each tool call inherits whatever `PATH` was
+current when its shell started. Prefix commands with the install directory (or, for a
+one-off interactive shell, `export PATH="$PATH:/c/Program Files/Go/bin:..."`) rather than
+assuming a fresh call will see it.

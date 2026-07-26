@@ -1,3 +1,8 @@
 # Go
 *.test
 *.out
+
+# C++ (cpp/campaign)
+*.exe
+*.o
+*.obj
