@@ -108,10 +108,10 @@ Chapters are an authoring structure and are **never surfaced as a count**. No ch
 number, no progress bar, no position in a sequence.
 
 **Escalation climbs through roughly the first third and then plateaus.** It rises over
-about the first five or six chapters, and the remaining ten sit at the ceiling. The climb
+about the first four chapters, and the remaining eight sit at the ceiling. The climb
 exists so the player feels the direction once; after that it needs no further
-demonstration. There is no crescendo, no darkest hour, and no worst night — chapter sixteen
-is no more intense than chapter eight.
+demonstration. There is no crescendo, no darkest hour, and no worst night — the last
+chapter is no more intense than the middle one.
 ([ADR 0013](adr/0013-escalation-plateaus.md))
 
 The plateau is the statement: *this is how it is now*, which is what **beef** is defined to
@@ -279,10 +279,13 @@ which is the specific failure mode ADR 0001 warns against. Skill must save *a na
 person*, visibly, with a one-step causal line: you covered the stairwell, so Marcus made
 it home.
 
-**Tuning target: roughly one bip in four costs the player their companion.** Against
-sixteen chapters ([ADR 0008](adr/0008-flat-chapter-sequence.md)) that is about four
+**Tuning target: roughly one bip in three costs the player their companion.** Against
+twelve chapters ([ADR 0008](adr/0008-flat-chapter-sequence.md)) that is about four
 deaths, so the common outcome is a set cut in half — with nobody lost and everybody lost
 both reachable and both rare.
+
+Both numbers moved together, from one in four against sixteen chapters, after the text
+prototype was played through. ADR 0008's tuning log records what was found.
 
 **This is not a probability the game rolls.** There is no dice throw deciding whether a
 member comes home. It is the *outcome encounter tuning should produce for a competent
@@ -293,8 +296,8 @@ and it means the nine-way spread of surviving rosters
 ([ADR 0007](adr/0007-zero-is-an-ending-not-a-fail-state.md)) comes from how the player
 played rather than from variance.
 
-The number and the chapter count are a single dial. Sixteen chapters at one in four and
-thirty-two at one in eight produce the same four deaths, so neither can be tuned alone.
+The number and the chapter count are a single dial. Twelve chapters at one in three and
+twenty-four at one in six produce the same four deaths, so neither can be tuned alone.
 
 ### 6.4 Return
 
@@ -430,7 +433,13 @@ None of these threaten what is settled above. All need answers before production
 
 1. **Engine.** No engine chosen; no code exists. Deliberately deferred — the decisions
    above are engine-agnostic. Warrants its own ADR when taken.
-2. **Encounter tuning.** The target is set — roughly one bip in four costs the player their
-   companion, against sixteen chapters (§6.3). Whether encounters as built actually produce
+2. **Encounter tuning.** The target is set — roughly one bip in three costs the player their
+   companion, against twelve chapters (§6.3). Whether encounters as built actually produce
    that for a competent player can only be answered by playing them, and the target moves
    with the chapter count rather than independently.
+
+   `cmd/roundhill` has since settled the half of this that does not need an encounter. The
+   chapter count was played down from sixteen to twelve, and the loss rate moved with it to
+   hold the target at about four deaths. The other half is untouched and cannot be reached
+   from a text harness: it rolls for whether a companion comes home, where the real game has
+   to *earn* that result from how the player played. Nothing here has tested an encounter.
