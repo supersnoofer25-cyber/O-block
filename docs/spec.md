@@ -447,6 +447,12 @@ None of these threaten what is settled above. All need answers before production
 
    `cmd/roundhill` has since settled the half of this that does not need an encounter. The
    chapter count was played down from sixteen to twelve, and the loss rate moved with it to
-   hold the target at about four deaths. The other half is untouched and cannot be reached
-   from a text harness: it rolls for whether a companion comes home, where the real game has
-   to *earn* that result from how the player played. Nothing here has tested an encounter.
+   hold the target at about four deaths.
+
+   The other half now has a mechanism, settled by [ADR
+   0015](adr/0015-the-encounter-earns-survival-it-does-not-roll-it.md): a companion carries a
+   hidden per-bip tally of danger the player did not deny in time, resolved by the same
+   skill-driven combat that resolves fire against the player, never a roll. What is still
+   open is whether that mechanism, once built, actually lands one bip in three for a
+   competent player — that number can only come from playing built encounters, which needs
+   the engine and cannot be answered by design alone.

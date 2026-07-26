@@ -11,7 +11,7 @@ exists, and the decisions are binding. Read before building.
 | Path | What it is |
 |---|---|
 | `docs/spec.md` | The design spec. §11 holds the remaining open questions. |
-| `docs/adr/` | Fourteen decision records. These are binding, including their foreclosures. |
+| `docs/adr/` | Fifteen decision records. These are binding, including their foreclosures. |
 | `docs/cast.md` | The eight, in prose. `campaign/cast.go` is that file as data. |
 | `CONTEXT.md` | The glossary. Terms have exact meanings — use them strictly. |
 | `campaign/` | Headless Go rules module. Pure, engine-agnostic, no rendering, no I/O. |
@@ -60,37 +60,35 @@ agreeing, and it is the most common way a well-meant change breaks the design.
 
 ## Current state — 2026-07-25
 
-Design is closed. Every open question in `spec.md` §11 is answered except encounter tuning.
+Design is closed. Every open question in `spec.md` §11 is answered except the actual
+tuning number, which needs an engine to test (see below).
 
 - `campaign` module built and merged, exercised end to end by the prototype.
 - Campaign is **twelve chapters**, loss rate **one bip in three** (ADR 0008 tuning log).
 - Engine decided: **Unreal 5, PC first**, solo developer (ADR 0014).
+- The encounter seam is designed: [ADR
+  0015](docs/adr/0015-the-encounter-earns-survival-it-does-not-roll-it.md) — a companion
+  carries a hidden per-bip tally of danger the player did not deny in time, resolved by the
+  same skill-driven combat that resolves fire against the player, never a roll. Denying a
+  threat means killing/suppressing it when the companion rides on the back, or never giving
+  it the angle when the companion is on the back and the player rides. Familiarity (ADR
+  0006) gates how much warning the player gets, not the threat itself.
+  `campaign.BipOut.CompanionReturned bool` is unchanged — nothing downstream needs more
+  than that, so the seam's shape was already right.
 - No open PRs, no open issues, `main` green.
 
-### The next decision, and it is a blocking one
+### The next decision
 
-**What the encounter hands the module, and how it earns it.**
-
-`campaign.BipOut` takes `CompanionReturned bool`. The module consumes that result and never
-decides it (story 15), which is correct. But `roundhill` produces it with `rng.Intn(loss)`
-— a dice roll — and the real game cannot. ADR 0001 promises the player that playing well
-saves the person in front of them, with a one-step causal line: *you covered the stairwell,
-so Marcus made it home*. Nothing has tested that promise, and it is the only load-bearing
-claim in the design that a text harness cannot reach.
-
-So the open question is what the encounter measures such that the causal line is visible to
-the player, and whether `bool` is still the right shape for the seam once it is answered.
-
-Three ways forward were on the table when this session ended, unresolved:
-
-1. **Design the seam first.** The blocking question. Getting it wrong makes the C++ port
-   the wrong shape.
-2. **Port `campaign` to C++** (ADR 0014 committed to porting rather than bridging). Builds
-   and tests with `clang++` alone, no Unreal needed — but bakes in the current `bool`.
-3. **Both, seam first.** The port only gets done once.
+**Port `campaign` to C++** (ADR 0014 committed to porting rather than bridging — builds and
+tests with `clang++` alone, no Unreal needed). The seam is now designed, so the port is no
+longer at risk of baking in the wrong shape. After that, the encounter itself — the tally,
+the denial mechanics, ADR 0015 describes but does not build — is Unreal-side work and needs
+the engine.
 
 ### Picking this up on another machine
 
-Unreal was not installed where this was written. Confirm the engine is present, then start
-from the three options above. Nothing is half-finished — the tree is clean and every branch
-is merged, so there is no work-in-progress to recover.
+Neither Unreal nor a Go toolchain was found on the machine this ADR was written on — no
+`UnrealEditor.exe`, no Epic Games Launcher, no `go` on `PATH` anywhere searched. Confirm
+both are present before starting the C++ port or running `go test ./...`. Nothing is
+half-finished — the tree is clean and every branch is merged, so there is no work-in-progress
+to recover, only tooling to install.

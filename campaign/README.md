@@ -32,6 +32,9 @@ state because there is nothing else for the result to depend on.
 the module consumes results and never produces them (story 15). Whether a man comes
 home is decided by play, which is what makes
 [ADR 0001](../docs/adr/0001-tactical-agency-strategic-futility.md)'s promise true.
+[ADR 0015](../docs/adr/0015-the-encounter-earns-survival-it-does-not-roll-it.md) settles
+how the encounter itself earns that bool once it exists; nothing about the seam changed
+as a result, which is why this module didn't either.
 
 ## Rules enforced by absence
 
