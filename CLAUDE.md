@@ -72,7 +72,7 @@ that mistake was made once already and nearly cut the campaign on bad evidence.
 progress bar, no survivor tally, no timer, no visit allowance. This is four separate ADRs
 agreeing, and it is the most common way a well-meant change breaks the design.
 
-## Current state — 2026-07-25
+## Current state — 2026-07-26
 
 Design is closed. Every open question in `spec.md` §11 is answered except the actual
 tuning number, which needs an engine to test (see below).
@@ -100,11 +100,11 @@ tuning number, which needs an engine to test (see below).
 
 **Build the encounter in Unreal.** The rules module now exists in both languages and
 ADR 0015 describes what the encounter has to measure — a per-bip danger tally, denied
-by the player's own skill, never a roll. What doesn't exist yet is Unreal itself: the
-engine has never been installed or opened on any machine this project has run on. That's
-the actual next step, not a design question — confirm the engine is present, then start
-wiring `cpp/campaign`'s `Apply` seam to something that can produce a `CompanionReturned`
-the way ADR 0015 describes, rather than roll for it.
+by the player's own skill, never a roll. The engine is now installed (see Toolchain
+below) but no project has been created in it yet — nothing has been opened, no Unreal
+project exists anywhere in this repo or beside it. That's the actual next step: create
+the project, then start wiring `cpp/campaign`'s `Apply` seam to something that can
+produce a `CompanionReturned` the way ADR 0015 describes, rather than roll for it.
 
 ### Toolchain — what's installed where this was last worked on
 
@@ -120,7 +120,10 @@ when this session started, and installing it was itself part of the work.
   `cpp/campaign` actually builds with. It's a large archive and extraction is slow
   (likely real-time antivirus scanning many small files) — budget several minutes, not
   seconds, and don't mistake the wait for a hang.
-- **Unreal** — still not installed anywhere. Needed for the actual next step above.
+- **Unreal 5.8** — installed via the Epic Games Launcher at `E:\Epic Games\UE_5.8`
+  (`UnrealEditor.exe` under `Engine\Binaries\Win64`). The launcher itself lives at
+  `D:\Epic Games\Launcher`. Both are on different drives than the OS and this repo —
+  don't assume `C:` when looking for either. No Unreal project has been created yet.
 
 Neither Bash nor PowerShell in this environment picks up a `winget`-installed program's
 new `PATH` entry automatically mid-session; each tool call inherits whatever `PATH` was
