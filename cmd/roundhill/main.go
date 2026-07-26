@@ -146,14 +146,13 @@ func (g *game) bip() {
 		seat = campaign.OnBack
 	}
 
+	// What you can say about each of them, which is what the evenings bought (ADR
+	// 0006). A man you have never sat with reads as opaque here, and it is the same
+	// man — the screen is reporting Jamal, not rating him.
 	fmt.Println()
 	for _, id := range g.state.Companions() {
 		m, _ := campaign.MemberByID(id)
-		how := m.Capability.OnBack
-		if seat == campaign.OnBack {
-			how = m.Capability.Riding
-		}
-		fmt.Printf("  %-10s %s. %s.\n", m.Name, m.Capability.Name, how)
+		fmt.Printf("  %-10s %s\n", m.Name, wrapIndent(g.state.Reading(id, seat), 13))
 	}
 	prompt := "Who's on the back?"
 	if seat == campaign.OnBack {
@@ -283,6 +282,30 @@ func missing(before, after []campaign.MemberID, except campaign.MemberID) []camp
 		}
 	}
 	return gone
+}
+
+// wrapIndent is wrap for prose that hangs off a name in the left column.
+func wrapIndent(s string, indent int) string {
+	const width = 76
+	pad := strings.Repeat(" ", indent)
+	var b strings.Builder
+	n, first := indent, true
+	for _, w := range strings.Fields(s) {
+		switch {
+		case first:
+			first = false
+		case n+1+len(w) > width:
+			b.WriteString("\n")
+			b.WriteString(pad)
+			n = indent
+		default:
+			b.WriteString(" ")
+			n++
+		}
+		b.WriteString(w)
+		n += len(w)
+	}
+	return b.String()
 }
 
 // wrap breaks prose to a readable measure. The flares are sentences rather than the
