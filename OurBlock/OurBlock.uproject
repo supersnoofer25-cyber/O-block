@@ -1,0 +1,13 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "5.8",
+	"Category": "",
+	"Description": "Our Block",
+	"Modules": [
+		{
+			"Name": "OurBlock",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
