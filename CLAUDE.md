@@ -72,7 +72,7 @@ that mistake was made once already and nearly cut the campaign on bad evidence.
 progress bar, no survivor tally, no timer, no visit allowance. This is four separate ADRs
 agreeing, and it is the most common way a well-meant change breaks the design.
 
-## Current state — 2026-07-26
+## Current state — 2026-07-27
 
 Design is closed. Every open question in `spec.md` §11 is answered except the actual
 tuning number, which needs an engine to test (see below).
@@ -95,16 +95,18 @@ tuning number, which needs an engine to test (see below).
   rather than a test run. Everything else is a direct translation; see
   `cpp/campaign/README.md` for the handful of naming changes C++ needed that Go didn't.
 - No open PRs, no open issues, `main` green.
+- **`OurBlock/` project skeleton exists** — a hand-written `.uproject`, target/build `.cs`
+  files, and an empty `OurBlock` runtime module (`OurBlock.h`/`.cpp`). It has never been
+  opened in the editor, so it hasn't generated `Binaries`/`Intermediate`/`Saved` yet and
+  isn't verified to actually load or build.
 
 ### The next decision
 
-**Build the encounter in Unreal.** The rules module now exists in both languages and
-ADR 0015 describes what the encounter has to measure — a per-bip danger tally, denied
-by the player's own skill, never a roll. The engine is now installed (see Toolchain
-below) but no project has been created in it yet — nothing has been opened, no Unreal
-project exists anywhere in this repo or beside it. That's the actual next step: create
-the project, then start wiring `cpp/campaign`'s `Apply` seam to something that can
-produce a `CompanionReturned` the way ADR 0015 describes, rather than roll for it.
+**Open `OurBlock/` in Unreal 5.8 and confirm it builds**, since the skeleton was
+hand-written rather than created by the editor's project wizard and has not been
+launched yet. Once that's confirmed, start wiring `cpp/campaign`'s `Apply` seam to
+something that can produce a `CompanionReturned` the way ADR 0015 describes — a per-bip
+danger tally, denied by the player's own skill, never a roll.
 
 ### Toolchain — what's installed where this was last worked on
 
@@ -123,7 +125,11 @@ when this session started, and installing it was itself part of the work.
 - **Unreal 5.8** — installed via the Epic Games Launcher at `E:\Epic Games\UE_5.8`
   (`UnrealEditor.exe` under `Engine\Binaries\Win64`). The launcher itself lives at
   `D:\Epic Games\Launcher`. Both are on different drives than the OS and this repo —
-  don't assume `C:` when looking for either. No Unreal project has been created yet.
+  don't assume `C:` when looking for either. `OurBlock/` is a hand-written project
+  skeleton, not yet opened in the editor.
+- **VS Code** (`Microsoft.VisualStudioCode` via `winget`) — installed to
+  `%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe`, for editing `cpp/campaign` and
+  the Unreal C++ modules.
 
 Neither Bash nor PowerShell in this environment picks up a `winget`-installed program's
 new `PATH` entry automatically mid-session; each tool call inherits whatever `PATH` was
