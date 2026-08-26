@@ -28,13 +28,18 @@ ADirtBike::ADirtBike()
 	Mesh->SetWorldScale3D(FVector(2.2f, 0.6f, 0.7f));
 	Mesh->SetCollisionProfileName(TEXT("Pawn"));
 
+	// Z=35 marks the bike mesh's own top surface (the default engine cube is 100 units
+	// per side, and the 0.7 Z scale above halves to +/-35 locally) - this is where a
+	// rider's feet belong, not an arbitrary height. AGrayBoxCharacter::AttachToBikeSeat
+	// adds its own capsule half-height on top of whatever seat position it attaches
+	// to, so this only needs to mark the surface, not account for capsule size itself.
 	DriverSeat = CreateDefaultSubobject<USceneComponent>(TEXT("DriverSeat"));
 	DriverSeat->SetupAttachment(Mesh);
-	DriverSeat->SetRelativeLocation(FVector(40.f, 0.f, 90.f));
+	DriverSeat->SetRelativeLocation(FVector(40.f, 0.f, 35.f));
 
 	PassengerSeat = CreateDefaultSubobject<USceneComponent>(TEXT("PassengerSeat"));
 	PassengerSeat->SetupAttachment(Mesh);
-	PassengerSeat->SetRelativeLocation(FVector(-40.f, 0.f, 90.f));
+	PassengerSeat->SetRelativeLocation(FVector(-40.f, 0.f, 35.f));
 
 	// The driver's camera looks forward along the bike, fixed - ADR 0004 gives the
 	// rider the approach and the escape, not free aim, which is what actually

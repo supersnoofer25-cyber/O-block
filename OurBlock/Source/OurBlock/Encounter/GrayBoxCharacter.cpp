@@ -152,7 +152,13 @@ void AGrayBoxCharacter::AttachToBikeSeat(ADirtBike* Bike)
 	GetCharacterMovement()->SetMovementMode(MOVE_None);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	AttachToComponent(Seat, FAttachmentTransformRules::SnapToTargetIncludingScale);
-	SetActorRelativeLocation(FVector::ZeroVector);
+
+	// The seat marks where the passenger's feet belong, not where the capsule's own
+	// origin should sit - SnapToTarget places the capsule's center (not its base)
+	// exactly at the seat point, which buries roughly the bottom half of the capsule,
+	// and the camera with it, inside the bike mesh unless corrected here.
+	const float HalfHeight = GetCapsuleComponent()->GetScaledCapsuleHalfHeight();
+	SetActorRelativeLocation(FVector(0.f, 0.f, HalfHeight));
 	SetActorRelativeRotation(FRotator::ZeroRotator);
 }
 
