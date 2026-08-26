@@ -9,6 +9,7 @@
 #include "InputAction.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "DrawDebugHelpers.h"
 #include "../OurBlock.h"
 
 AGrayBoxCharacter::AGrayBoxCharacter()
@@ -149,13 +150,18 @@ void AGrayBoxCharacter::Fire(const FInputActionValue&)
 	const FVector Start = Camera->GetComponentLocation();
 	const FVector End = Start + Camera->GetForwardVector() * FireRange;
 
+	// Visible for a few seconds so a shot that missed shows exactly where it actually
+	// went, rather than leaving "hit nothing" to mean either bad aim or a real bug.
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 3.0f, 0, 2.0f);
+
 	FHitResult Hit;
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 
 	if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
 	{
-		UE_LOG(LogOurBlock, Log, TEXT("Fire() hit %s"), *GetNameSafe(Hit.GetActor()));
+		UE_LOG(LogOurBlock, Log, TEXT("Fire() hit %s at %s"), *GetNameSafe(Hit.GetActor()), *Hit.Location.ToString());
+		DrawDebugSphere(GetWorld(), Hit.Location, 15.f, 8, FColor::Red, false, 3.0f);
 		if (AThreatActor* Threat = Cast<AThreatActor>(Hit.GetActor()))
 		{
 			Threat->Deny();
@@ -163,6 +169,6 @@ void AGrayBoxCharacter::Fire(const FInputActionValue&)
 	}
 	else
 	{
-		UE_LOG(LogOurBlock, Log, TEXT("Fire() hit nothing"));
+		UE_LOG(LogOurBlock, Log, TEXT("Fire() hit nothing, traced from %s to %s"), *Start.ToString(), *End.ToString());
 	}
 }
