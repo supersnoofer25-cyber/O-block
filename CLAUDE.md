@@ -205,15 +205,38 @@ tuning number, which needs an engine to test (see below).
     than assuming — `Rotator(0, 90, 0)` intended as yaw silently became pitch, pointing
     a spawned actor straight up instead of at anything.
 
+- **The dirt bike and seat choice exist** (ADR 0004). `ADirtBike` is kinematic
+  movement — accelerate, turn, drag — not Chaos Vehicle physics; a placeholder for
+  realism, not for the seat structure, which is real: two fixed scene-component seats
+  (`GetSeatComponent(EBikeSeat)`), matching how `campaign::BipOut.Companion` is one
+  field rather than a collection. The driver's camera is fixed forward, not free-look —
+  ADR 0004 gives the rider the approach and the escape, not aim, and that's what
+  actually separates this seat from the passenger's. `AGrayBoxCharacter::AttachToBikeSeat`
+  turns off its own movement and capsule collision and snaps onto the passenger seat,
+  keeping look/fire untouched — proving those still work while the bike moves is the
+  actual point of that seat. `AGrayBoxGameMode::bPlayerRides` is the seat choice
+  itself, as a config toggle rather than a prep-screen menu that doesn't exist yet.
+  Whichever seat the player doesn't take gets a placeholder occupant, deliberately not
+  real companion AI — ADR 0004 names that as its own load-bearing, non-trivial work.
+  Verified via a headless boot with the default config (`bPlayerRides = false`): player
+  spawns attached to a placeholder-driven bike's passenger seat, zero errors.
+
+  **Deliberately not built yet**: the "exposure, not aim" denial mechanic ADR 0015
+  describes for when the player rides — that seat is now physically wired up (you can
+  toggle `bPlayerRides = true` and rebuild to sit in it), but nothing yet makes threats
+  behave differently for a moving companion-gunner than they did for the stationary
+  gray-box. That's a real design question, not a quick follow-on.
+
 ### The next decision
 
-**Keep tuning the fuse and threshold by playing, then decide if the mechanic is worth
-building for real.** The gray-box works end to end and one round of feedback has
-already moved the fuse from 3s to 5s; more playthroughs at different `TimeToFire` /
-`Threshold` values are what actually answers spec.md's open question 2, not more code.
-Once the timing feels right, replacing the gray-box actors with real ones (bike, seat,
-companion AI, real weapons) is production work, not a design question — ADR 0015
-already settled what the mechanism is, this only tests whether it's the right one.
+**Two threads, either is legitimate next work.** (1) Keep tuning the fuse/threshold by
+playing the already-working "player on the back" configuration — spec.md's open
+question 2 only gets answered by playing, not by more code. (2) Design and build the
+"player rides, companion shoots with fixed competence, denial is about exposure not
+aim" mechanic ADR 0015 describes for the other seat — genuinely new design work, not
+an extension of the existing `Deny()`-on-click system. Either is a reasonable place to
+pick up; building both bike movement *and* a new mechanic in the same pass is how this
+turns into more than one thing to debug at once.
 
 ### Toolchain — what's installed where this was last worked on
 
