@@ -36,6 +36,14 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
+	// Adding the mapping context has to wait for a real PlayerController to exist.
+	// GameModeBase::RestartPlayer spawns the pawn (running BeginPlay) before it calls
+	// Possess() on it, so GetController() is still null when BeginPlay runs - this is
+	// called from both BeginPlay and PossessedBy, whichever ends up running second,
+	// and is a no-op if either half (the mapping context, or a valid controller) isn't
+	// ready yet.
+	virtual void PossessedBy(AController* NewController) override;
+
 private:
 	UPROPERTY(VisibleAnywhere, Category = "Encounter")
 	TObjectPtr<UCameraComponent> Camera;
@@ -63,4 +71,5 @@ private:
 	void Fire(const FInputActionValue& Value);
 
 	UInputAction* MakeBoolAction();
+	void ApplyMappingContextIfReady();
 };

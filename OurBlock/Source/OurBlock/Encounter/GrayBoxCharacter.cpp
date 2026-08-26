@@ -52,19 +52,38 @@ void AGrayBoxCharacter::BeginPlay()
 	MappingContext->MapKey(LookAction, EKeys::Mouse2D);
 	MappingContext->MapKey(FireAction, EKeys::LeftMouseButton);
 
-	if (APlayerController* PC = Cast<APlayerController>(GetController()))
+	ApplyMappingContextIfReady();
+}
+
+void AGrayBoxCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	ApplyMappingContextIfReady();
+}
+
+void AGrayBoxCharacter::ApplyMappingContextIfReady()
+{
+	if (!MappingContext)
 	{
-		if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
-		{
-			if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
-					LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
-			{
-				Subsystem->AddMappingContext(MappingContext, 0);
-			}
-		}
-		PC->SetInputMode(FInputModeGameOnly());
-		PC->bShowMouseCursor = false;
+		return; // BeginPlay hasn't built it yet
 	}
+
+	APlayerController* PC = Cast<APlayerController>(GetController());
+	if (!PC)
+	{
+		return; // not possessed yet
+	}
+
+	if (ULocalPlayer* LocalPlayer = PC->GetLocalPlayer())
+	{
+		if (UEnhancedInputLocalPlayerSubsystem* Subsystem =
+				LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
+		{
+			Subsystem->AddMappingContext(MappingContext, 0);
+		}
+	}
+	PC->SetInputMode(FInputModeGameOnly());
+	PC->bShowMouseCursor = false;
 }
 
 void AGrayBoxCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
