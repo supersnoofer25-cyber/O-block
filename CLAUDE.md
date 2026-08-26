@@ -95,18 +95,23 @@ tuning number, which needs an engine to test (see below).
   rather than a test run. Everything else is a direct translation; see
   `cpp/campaign/README.md` for the handful of naming changes C++ needed that Go didn't.
 - No open PRs, no open issues, `main` green.
-- **`OurBlock/` project skeleton exists** — a hand-written `.uproject`, target/build `.cs`
-  files, and an empty `OurBlock` runtime module (`OurBlock.h`/`.cpp`). It has never been
-  opened in the editor, so it hasn't generated `Binaries`/`Intermediate`/`Saved` yet and
-  isn't verified to actually load or build.
+- **`OurBlock/` builds.** The hand-written skeleton compiles clean: `Build.bat
+  OurBlockEditor Win64 Development -Project=OurBlock/OurBlock.uproject` produces
+  `UnrealEditor-OurBlock.dll` against MSVC 14.44 and the Windows 10 SDK, with
+  `UnrealEditor.exe` as the launch target. Required installing Visual Studio Build
+  Tools 2022 with the C++ workload — Unreal's own build tooling needs the MSVC ABI, the
+  same constraint that ruled out plain LLVM for `cpp/campaign`, and there's no MinGW
+  workaround for the engine itself. Still never opened in the editor UI itself, only
+  built from the command line.
 
 ### The next decision
 
-**Open `OurBlock/` in Unreal 5.8 and confirm it builds**, since the skeleton was
-hand-written rather than created by the editor's project wizard and has not been
-launched yet. Once that's confirmed, start wiring `cpp/campaign`'s `Apply` seam to
-something that can produce a `CompanionReturned` the way ADR 0015 describes — a per-bip
-danger tally, denied by the player's own skill, never a roll.
+**Open `OurBlock/` in the Unreal 5.8 editor itself**, now that the command-line build is
+confirmed working — the editor UI hasn't been launched yet, and opening it for the first
+time regenerates more project state (a `.sln`, editor-only intermediates) that the CLI
+build alone doesn't touch. Once that's done, start wiring `cpp/campaign`'s `Apply` seam
+to something that can produce a `CompanionReturned` the way ADR 0015 describes — a
+per-bip danger tally, denied by the player's own skill, never a roll.
 
 ### Toolchain — what's installed where this was last worked on
 
@@ -125,8 +130,15 @@ when this session started, and installing it was itself part of the work.
 - **Unreal 5.8** — installed via the Epic Games Launcher at `E:\Epic Games\UE_5.8`
   (`UnrealEditor.exe` under `Engine\Binaries\Win64`). The launcher itself lives at
   `D:\Epic Games\Launcher`. Both are on different drives than the OS and this repo —
-  don't assume `C:` when looking for either. `OurBlock/` is a hand-written project
-  skeleton, not yet opened in the editor.
+  don't assume `C:` when looking for either. `OurBlock/` builds from the command line;
+  the editor UI itself has not been opened yet.
+- **Visual Studio Build Tools 2022** (`Microsoft.VisualStudio.2022.BuildTools` via
+  `winget`, with the `Microsoft.VisualStudio.Workload.VCTools` override) — Unreal's
+  build tooling requires the MSVC ABI on Windows; there is no LLVM-MinGW-style
+  workaround for the engine itself the way there was for `cpp/campaign`. First two
+  `winget install` attempts both failed with exit 1602 ("cancelled") when run through a
+  non-interactive shell — same failure mode LLVM-MinGW hit — and it only succeeded once
+  run directly in an interactive shell where the UAC prompt could be approved.
 - **VS Code** (`Microsoft.VisualStudioCode` via `winget`) — installed to
   `%LOCALAPPDATA%\Programs\Microsoft VS Code\Code.exe`, for editing `cpp/campaign` and
   the Unreal C++ modules.
