@@ -95,23 +95,25 @@ tuning number, which needs an engine to test (see below).
   rather than a test run. Everything else is a direct translation; see
   `cpp/campaign/README.md` for the handful of naming changes C++ needed that Go didn't.
 - No open PRs, no open issues, `main` green.
-- **`OurBlock/` builds.** The hand-written skeleton compiles clean: `Build.bat
-  OurBlockEditor Win64 Development -Project=OurBlock/OurBlock.uproject` produces
-  `UnrealEditor-OurBlock.dll` against MSVC 14.44 and the Windows 10 SDK, with
-  `UnrealEditor.exe` as the launch target. Required installing Visual Studio Build
-  Tools 2022 with the C++ workload — Unreal's own build tooling needs the MSVC ABI, the
-  same constraint that ruled out plain LLVM for `cpp/campaign`, and there's no MinGW
-  workaround for the engine itself. Still never opened in the editor UI itself, only
-  built from the command line.
+- **`OurBlock/` builds and opens.** `Build.bat OurBlockEditor Win64 Development
+  -Project=OurBlock/OurBlock.uproject` produces `UnrealEditor-OurBlock.dll` against MSVC
+  14.44 and the Windows 10 SDK. Required installing Visual Studio Build Tools 2022 with
+  the C++ workload — Unreal's own build tooling needs the MSVC ABI, the same constraint
+  that ruled out plain LLVM for `cpp/campaign`, and there's no MinGW workaround for the
+  engine itself. The editor has since been launched against the project directly
+  (`UnrealEditor.exe OurBlock.uproject`) and opened clean: asset registry scan completed,
+  default map passed `MapCheck` with 0 errors/0 warnings, no missing-module dialog. The
+  hand-written skeleton is now fully verified — built, opened, and running.
 
 ### The next decision
 
-**Open `OurBlock/` in the Unreal 5.8 editor itself**, now that the command-line build is
-confirmed working — the editor UI hasn't been launched yet, and opening it for the first
-time regenerates more project state (a `.sln`, editor-only intermediates) that the CLI
-build alone doesn't touch. Once that's done, start wiring `cpp/campaign`'s `Apply` seam
-to something that can produce a `CompanionReturned` the way ADR 0015 describes — a
-per-bip danger tally, denied by the player's own skill, never a roll.
+**Start wiring `cpp/campaign`'s `Apply` seam into the project.** The engine is verified
+end to end; the design is closed on everything except the tuning number (§11). The
+concrete next unit of work is producing a `CompanionReturned` the way
+[ADR 0015](docs/adr/0015-the-encounter-earns-survival-it-does-not-roll-it.md) describes —
+a per-bip danger tally, denied by the player's own skill, never a roll — rather than
+rolling for it. `OurBlock/` currently has an empty runtime module and no `Content/`
+folder yet; both need to exist before there's anything to playtest.
 
 ### Toolchain — what's installed where this was last worked on
 
