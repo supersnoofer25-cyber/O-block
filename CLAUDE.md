@@ -140,17 +140,52 @@ tuning number, which needs an engine to test (see below).
   into a Windows filesystem path before Unreal ever sees it (MSYS argv conversion).
   Prefix the command with `MSYS2_ARG_CONV_EXCL="*"` when passing one from this shell.
 
+- **A gray-box of ADR 0015's danger tally exists and is playable.**
+  `Source/OurBlock/Encounter/`:
+  - `UDangerTallyComponent` — the tally and threshold themselves. `AddDanger` is called
+    only when a threat wasn't denied in time; `DidCompanionSurvive` is a plain
+    threshold check, never a roll.
+  - `AThreatActor` — a sphere with a countdown. `Deny()` (called by the player's fire
+    trace) cancels it and adds nothing; left alone, it fires and adds
+    `DangerOnFire` to whatever `UDangerTallyComponent` it targets. Firing is final —
+    denying a threat after it already fired does not undo the danger it added.
+  - `ACompanionStandIn` — a cube holding the tally component, nothing else. Not a
+    companion in ADR 0006/0009's sense; just something for threats to be aimed at.
+  - `AGrayBoxCharacter` / `AGrayBoxGameMode` — WASD, mouselook, left-click fires a line
+    trace that calls `Deny()` on whatever `AThreatActor` it hits. Input is built at
+    runtime in C++ (`NewObject<UInputMappingContext>`, mapped to engine `FKey`s
+    directly) rather than loaded from a Content asset, so none of this needed the
+    editor GUI to author.
+
+  The tally/threat logic is verified headlessly (`EncounterPortTest.cpp`,
+  `OurBlock.Encounter.*`, four tests — denial adds nothing, firing adds exactly its
+  weight, firing is irreversible, outcome is a deterministic threshold not a roll) the
+  same way as `OurBlock.Campaign`'s suite. What a test *can't* answer — whether denying
+  a threat in time actually feels different from not — needs an actual human to press
+  Play: `Content/Maps/TestLevel.umap` has `ACompanionStandIn` at the origin and three
+  `AThreatActor`s around it (`Content/Python/populate_test_encounter.py`), each on a
+  three-second fuse. Open the project in the editor and press Play, or run
+  `UnrealEditor.exe OurBlock.uproject` and Play-In-Editor on `TestLevel`.
+
+  **Gotcha hit along the way**: a level's own World Settings → GameMode Override takes
+  priority over `DefaultEngine.ini`'s `GlobalDefaultGameMode` unconditionally.
+  `TestLevel` was created before `AGrayBoxGameMode` existed, so its override was still
+  unset and the game silently fell back to bare `GameModeBase` (no pawn class, no
+  input) even with the ini set correctly. Fixed by setting the level's own override
+  directly (`Content/Python/set_test_level_gamemode.py`) rather than trusting the
+  project-wide default alone.
+
 ### The next decision
 
-**Build the actual encounter.** The rules module runs correctly inside Unreal and a
-`UGameInstance` can now instantiate `UCampaignSubsystem` for real — the plumbing this
-project needed is done. `TestLevel` is deliberately not a real level: a plane and a
-`PlayerStart` prove PIE works, nothing more. The concrete next unit of work is still
-producing a `CompanionReturned` the way
-[ADR 0015](docs/adr/0015-the-encounter-earns-survival-it-does-not-roll-it.md) describes
-— a per-bip danger tally, denied by the player's own skill, never a roll — but that now
-means building an actual encounter (level geometry, a companion, something to shoot),
-not further plumbing.
+**Play the gray-box and judge whether the mechanic is worth building for real.** The
+logic is verified; the feel isn't, and only a human walking up to `ACompanionStandIn`
+and deciding whether to shoot each `AThreatActor` before its three seconds run out can
+answer that. If it's not landing, the two levers ADR 0015 itself names are the fuse
+timing (`AThreatActor::TimeToFire`) and the threshold
+(`UDangerTallyComponent::Threshold`) — both placeholders, both meant to move. Once the
+shape feels right, replacing the gray-box actors with real ones (bike, seat, companion
+AI, real weapons) is production work, not a design question — ADR 0015 already settled
+what the mechanism is, this only tests whether it's the right one.
 
 ### Toolchain — what's installed where this was last worked on
 
