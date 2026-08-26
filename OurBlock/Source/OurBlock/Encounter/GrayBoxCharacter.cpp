@@ -18,7 +18,16 @@ AGrayBoxCharacter::AGrayBoxCharacter()
 	Camera->SetupAttachment(GetCapsuleComponent());
 	Camera->SetRelativeLocation(FVector(0.f, 0.f, BaseEyeHeight));
 
+	// bUseControllerRotationYaw makes the capsule itself turn to face where the player
+	// looks horizontally - fine, a capsule has no visible orientation to look wrong.
+	// Pitch is deliberately not handled the same way (the capsule should never tilt),
+	// but that means nothing was applying the controller's pitch anywhere at all:
+	// AddControllerPitchInput was updating the controller's rotation, and nothing ever
+	// read it back out. bUsePawnControlRotation makes the camera itself follow the
+	// controller's full rotation independent of the capsule's, which is the normal way
+	// to decouple "look up/down" from a body that shouldn't visually pitch.
 	bUseControllerRotationYaw = true;
+	Camera->bUsePawnControlRotation = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 
 	// Built here, not in BeginPlay - it turns out SetupPlayerInputComponent (called
@@ -152,7 +161,10 @@ void AGrayBoxCharacter::Fire(const FInputActionValue&)
 
 	// Visible for a few seconds so a shot that missed shows exactly where it actually
 	// went, rather than leaving "hit nothing" to mean either bad aim or a real bug.
-	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 3.0f, 0, 2.0f);
+	// Thickness 0 draws a true thin line rather than a camera-facing extruded quad -
+	// the trace starts at the camera itself, so a thick line viewed nearly end-on
+	// rendered as a big flat rectangle covering most of the view.
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 3.0f, 0, 0.0f);
 
 	FHitResult Hit;
 	FCollisionQueryParams Params;
