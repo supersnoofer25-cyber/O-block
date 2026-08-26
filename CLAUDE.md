@@ -17,6 +17,7 @@ exists, and the decisions are binding. Read before building.
 | `campaign/` | Headless Go rules module. Pure, engine-agnostic, no rendering, no I/O. |
 | `cpp/campaign/` | C++ port of the above (ADR 0014). Same seam, same story-numbered tests. |
 | `cmd/roundhill/` | Text prototype. Not the game — a harness for answering design questions cheaply. |
+| `OurBlock/` | The Unreal 5.8 project. `Source/OurBlock/Campaign/` wires `cpp/campaign` in. |
 
 ## Commands
 
@@ -72,7 +73,7 @@ that mistake was made once already and nearly cut the campaign on bad evidence.
 progress bar, no survivor tally, no timer, no visit allowance. This is four separate ADRs
 agreeing, and it is the most common way a well-meant change breaks the design.
 
-## Current state — 2026-07-27
+## Current state — 2026-08-26
 
 Design is closed. Every open question in `spec.md` §11 is answered except the actual
 tuning number, which needs an engine to test (see below).
@@ -105,15 +106,39 @@ tuning number, which needs an engine to test (see below).
   default map passed `MapCheck` with 0 errors/0 warnings, no missing-module dialog. The
   hand-written skeleton is now fully verified — built, opened, and running.
 
+- **The `Apply` seam is wired into `OurBlock`.** `Source/OurBlock/Campaign/` holds
+  one-line shims (`#include "../../../../cpp/campaign/*.cpp"`) that compile
+  `cpp/campaign`'s exact source directly into the `OurBlock` module — no separate
+  Unreal module, on purpose: an Editor build is modular (every module is its own DLL),
+  and `cpp/campaign` has no dllexport/dllimport decoration since it was built to know
+  nothing about UE. A separate module would need that decoration added just to cross
+  its own DLL boundary, which means touching the one file this project keeps as its
+  tested, standalone specification purely to satisfy a Windows linking mechanism.
+  Compiling the shims into the same DLL that calls them sidesteps the problem — there's
+  no boundary to cross. `OurBlock.Build.cs` needed `CppStandard = Cpp20` and
+  `bEnableExceptions = true` to match what the standalone `clang++` build already
+  assumed. `CampaignSubsystem` (a `UGameInstanceSubsystem`) owns a `campaign::State`,
+  exposes `SpendEvening`/`BipOut` to Blueprint via `ECampaignSeat`/`ECampaignError`
+  (`CampaignTypes.h`), and is the one place `FName` and `std::string` meet — nothing
+  behind `Campaign.h` ever sees an `FName`. Verified with a headless automation test
+  (`CampaignPortTest.cpp`, `OurBlock.Campaign.PortCompilesAndRuns`) run via
+  `UnrealEditor-Cmd.exe OurBlock.uproject -ExecCmds="Automation RunTests
+  OurBlock.Campaign; Quit" -unattended -nopause -nullrhi` — passed, proving the ported
+  rules produce correct results compiled by MSVC under UE's settings, not just under
+  the `clang++` build that's the actual specification. `UCampaignSubsystem` itself
+  isn't exercised by that test — it needs a real `UGameInstance`, which needs a PIE
+  session, which needs a level, none of which exist yet.
+
 ### The next decision
 
-**Start wiring `cpp/campaign`'s `Apply` seam into the project.** The engine is verified
-end to end; the design is closed on everything except the tuning number (§11). The
-concrete next unit of work is producing a `CompanionReturned` the way
-[ADR 0015](docs/adr/0015-the-encounter-earns-survival-it-does-not-roll-it.md) describes —
-a per-bip danger tally, denied by the player's own skill, never a roll — rather than
-rolling for it. `OurBlock/` currently has an empty runtime module and no `Content/`
-folder yet; both need to exist before there's anything to playtest.
+**Give the project something to actually play.** The rules module now runs correctly
+inside Unreal; what doesn't exist yet is a `Content/` folder, a level, or anything that
+would let a PIE session instantiate `UCampaignSubsystem` for real. The concrete next
+unit of work is still producing a `CompanionReturned` the way
+[ADR 0015](docs/adr/0015-the-encounter-earns-survival-it-does-not-roll-it.md) describes
+— a per-bip danger tally, denied by the player's own skill, never a roll — but that now
+means building an actual encounter (level geometry, a companion, something to shoot),
+not further plumbing.
 
 ### Toolchain — what's installed where this was last worked on
 
@@ -132,8 +157,16 @@ when this session started, and installing it was itself part of the work.
 - **Unreal 5.8** — installed via the Epic Games Launcher at `E:\Epic Games\UE_5.8`
   (`UnrealEditor.exe` under `Engine\Binaries\Win64`). The launcher itself lives at
   `D:\Epic Games\Launcher`. Both are on different drives than the OS and this repo —
-  don't assume `C:` when looking for either. `OurBlock/` builds from the command line;
-  the editor UI itself has not been opened yet.
+  don't assume `C:` when looking for either. `OurBlock/` builds and opens; the project
+  targets Shader Model 6 (Project Settings > Platforms > Windows), which needed the VC++
+  redistributable bundled at `Engine/Extras/Redist/en-us/vc_redist.x64.exe` updated to
+  clear an "outdated" warning on launch.
+- **A build with the editor open needs Live Coding (Ctrl+Alt+F11), not `Build.bat`** —
+  `Build.bat` refuses to run while Live Coding holds the module, and Live Coding itself
+  can't link in a module that didn't exist when the editor launched (no prior `.lib` to
+  patch). Adding a brand-new module means closing the editor, running `Build.bat`, then
+  reopening — only patches to modules that already existed at launch can go through
+  Live Coding.
 - **Visual Studio Build Tools 2022** (`Microsoft.VisualStudio.2022.BuildTools` via
   `winget`, with the `Microsoft.VisualStudio.Workload.VCTools` override) — Unreal's
   build tooling requires the MSVC ABI on Windows; there is no LLVM-MinGW-style
