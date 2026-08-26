@@ -15,9 +15,10 @@ class UInputAction;
 // "riding, on the back" only in the loosest sense: aiming and firing at threats is the
 // verb being tested, not which seat the player is nominally in.
 //
-// Input is built entirely in C++ at BeginPlay rather than from a Content-asset input
-// mapping, so this gray-box needs nothing beyond what's already in Source/ - no
-// Blueprint, no .uasset, nothing to author outside a text editor.
+// Input is built entirely in C++ in the constructor (as default subobjects - see the
+// .cpp for why it can't be BeginPlay) rather than from a Content-asset input mapping,
+// so this gray-box needs nothing beyond what's already in Source/ - no Blueprint, no
+// .uasset, nothing to author outside a text editor.
 UCLASS()
 class OURBLOCK_API AGrayBoxCharacter : public ACharacter
 {
@@ -36,12 +37,10 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
-	// Adding the mapping context has to wait for a real PlayerController to exist.
-	// GameModeBase::RestartPlayer spawns the pawn (running BeginPlay) before it calls
-	// Possess() on it, so GetController() is still null when BeginPlay runs - this is
-	// called from both BeginPlay and PossessedBy, whichever ends up running second,
-	// and is a no-op if either half (the mapping context, or a valid controller) isn't
-	// ready yet.
+	// Adding the mapping context has to wait for a real PlayerController to exist,
+	// which the constructor can't provide - called from both PossessedBy and BeginPlay,
+	// whichever ends up running second for a given spawn path, and is a no-op if the
+	// controller isn't valid yet.
 	virtual void PossessedBy(AController* NewController) override;
 
 private:
@@ -70,6 +69,6 @@ private:
 	void Look(const FInputActionValue& Value);
 	void Fire(const FInputActionValue& Value);
 
-	UInputAction* MakeBoolAction();
+	UInputAction* MakeBoolAction(FName SubobjectName);
 	void ApplyMappingContextIfReady();
 };

@@ -9,6 +9,7 @@
 #include "InputAction.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "../OurBlock.h"
 
 AGrayBoxCharacter::AGrayBoxCharacter()
 {
@@ -18,31 +19,31 @@ AGrayBoxCharacter::AGrayBoxCharacter()
 
 	bUseControllerRotationYaw = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
-}
 
-UInputAction* AGrayBoxCharacter::MakeBoolAction()
-{
-	UInputAction* Action = NewObject<UInputAction>(this);
-	Action->ValueType = EInputActionValueType::Boolean;
-	return Action;
-}
+	// Built here, not in BeginPlay - it turns out SetupPlayerInputComponent (called
+	// during possession) runs before BeginPlay does for a GameMode-spawned pawn, the
+	// opposite of what the initial version assumed. BindAction against a still-null
+	// UInputAction silently binds nothing, which is exactly what made every control
+	// look wired up yet do nothing: the mapping context itself was being added
+	// successfully, just to actions nothing had ever bound a callback to. The
+	// constructor is the one place guaranteed to run before every one of these
+	// lifecycle callbacks, so building the actions here removes the ordering question
+	// entirely rather than trying to guess it correctly a second time.
+	//
+	// Must be CreateDefaultSubobject, not NewObject: the engine hard-asserts if a
+	// UObject is constructed with NewObject's auto-generated (empty) name from inside
+	// another UObject's constructor, since that produces inconsistent object names
+	// across instances. CreateDefaultSubobject is the sanctioned way to create any
+	// UObject subobject - not just components - from a constructor.
+	MappingContext = CreateDefaultSubobject<UInputMappingContext>(TEXT("MappingContext"));
 
-void AGrayBoxCharacter::BeginPlay()
-{
-	Super::BeginPlay();
+	MoveForwardAction = MakeBoolAction(TEXT("MoveForwardAction"));
+	MoveBackAction = MakeBoolAction(TEXT("MoveBackAction"));
+	MoveLeftAction = MakeBoolAction(TEXT("MoveLeftAction"));
+	MoveRightAction = MakeBoolAction(TEXT("MoveRightAction"));
+	FireAction = MakeBoolAction(TEXT("FireAction"));
 
-	// Built at runtime rather than loaded from a Content asset - see the header for
-	// why. Mouse2D and the digital keys below are engine-provided FKeys; nothing here
-	// depends on any .uasset existing.
-	MappingContext = NewObject<UInputMappingContext>(this);
-
-	MoveForwardAction = MakeBoolAction();
-	MoveBackAction = MakeBoolAction();
-	MoveLeftAction = MakeBoolAction();
-	MoveRightAction = MakeBoolAction();
-	FireAction = MakeBoolAction();
-
-	LookAction = NewObject<UInputAction>(this);
+	LookAction = CreateDefaultSubobject<UInputAction>(TEXT("LookAction"));
 	LookAction->ValueType = EInputActionValueType::Axis2D;
 
 	MappingContext->MapKey(MoveForwardAction, EKeys::W);
@@ -51,13 +52,25 @@ void AGrayBoxCharacter::BeginPlay()
 	MappingContext->MapKey(MoveRightAction, EKeys::D);
 	MappingContext->MapKey(LookAction, EKeys::Mouse2D);
 	MappingContext->MapKey(FireAction, EKeys::LeftMouseButton);
+}
 
+UInputAction* AGrayBoxCharacter::MakeBoolAction(FName SubobjectName)
+{
+	UInputAction* Action = CreateDefaultSubobject<UInputAction>(SubobjectName);
+	Action->ValueType = EInputActionValueType::Boolean;
+	return Action;
+}
+
+void AGrayBoxCharacter::BeginPlay()
+{
+	Super::BeginPlay();
 	ApplyMappingContextIfReady();
 }
 
 void AGrayBoxCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
+	UE_LOG(LogOurBlock, Log, TEXT("PossessedBy: %s"), *GetNameSafe(NewController));
 	ApplyMappingContextIfReady();
 }
 
@@ -65,12 +78,14 @@ void AGrayBoxCharacter::ApplyMappingContextIfReady()
 {
 	if (!MappingContext)
 	{
+		UE_LOG(LogOurBlock, Warning, TEXT("ApplyMappingContextIfReady: no MappingContext yet"));
 		return; // BeginPlay hasn't built it yet
 	}
 
 	APlayerController* PC = Cast<APlayerController>(GetController());
 	if (!PC)
 	{
+		UE_LOG(LogOurBlock, Warning, TEXT("ApplyMappingContextIfReady: no PlayerController yet"));
 		return; // not possessed yet
 	}
 
@@ -80,7 +95,16 @@ void AGrayBoxCharacter::ApplyMappingContextIfReady()
 				LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
 			Subsystem->AddMappingContext(MappingContext, 0);
+			UE_LOG(LogOurBlock, Log, TEXT("ApplyMappingContextIfReady: mapping context added successfully"));
 		}
+		else
+		{
+			UE_LOG(LogOurBlock, Warning, TEXT("ApplyMappingContextIfReady: no EnhancedInputLocalPlayerSubsystem on LocalPlayer"));
+		}
+	}
+	else
+	{
+		UE_LOG(LogOurBlock, Warning, TEXT("ApplyMappingContextIfReady: PlayerController has no LocalPlayer"));
 	}
 	PC->SetInputMode(FInputModeGameOnly());
 	PC->bShowMouseCursor = false;
@@ -115,6 +139,8 @@ void AGrayBoxCharacter::Look(const FInputActionValue& Value)
 
 void AGrayBoxCharacter::Fire(const FInputActionValue&)
 {
+	UE_LOG(LogOurBlock, Log, TEXT("Fire() invoked"));
+
 	if (!Camera || !GetWorld())
 	{
 		return;
@@ -129,9 +155,14 @@ void AGrayBoxCharacter::Fire(const FInputActionValue&)
 
 	if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params))
 	{
+		UE_LOG(LogOurBlock, Log, TEXT("Fire() hit %s"), *GetNameSafe(Hit.GetActor()));
 		if (AThreatActor* Threat = Cast<AThreatActor>(Hit.GetActor()))
 		{
 			Threat->Deny();
 		}
+	}
+	else
+	{
+		UE_LOG(LogOurBlock, Log, TEXT("Fire() hit nothing"));
 	}
 }
