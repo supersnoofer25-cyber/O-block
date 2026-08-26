@@ -81,6 +81,18 @@ void AGrayBoxCharacter::PossessedBy(AController* NewController)
 {
 	Super::PossessedBy(NewController);
 	UE_LOG(LogOurBlock, Log, TEXT("PossessedBy: %s"), *GetNameSafe(NewController));
+
+	// The camera now follows the controller's rotation (bUsePawnControlRotation, added
+	// to fix pitch), not the pawn's own actor rotation - but nothing guarantees the
+	// controller's rotation starts synced to the pawn's, which is what PlayerStart's
+	// own facing actually set. Without this, the first frame (or more) can render
+	// facing wherever the controller's rotation happened to default to, not the
+	// direction the level was set up to start you looking.
+	if (NewController)
+	{
+		NewController->SetControlRotation(GetActorRotation());
+	}
+
 	ApplyMappingContextIfReady();
 }
 
