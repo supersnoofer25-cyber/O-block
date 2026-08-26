@@ -46,9 +46,16 @@ ADirtBike::ADirtBike()
 	// differentiates this seat from the passenger's (AGrayBoxCharacter's own free-look
 	// camera). Attached to the bike body, not the driver seat socket, so it doesn't
 	// inherit any lean/wobble a real vehicle mesh might add later at the seat point.
+	//
+	// -450 clears the bike's own half-length (110, from the 220-unit scaled body) by a
+	// real margin - the first version placed this at -150, only 40 units clear of the
+	// body, which in Unreal's units is barely more than one capsule-width back and
+	// filled most of the frame with the bike itself. Confirmed by screenshot, not
+	// assumption - a small number here reads as "far enough" only if you forget how
+	// large 220 units actually is next to it.
 	DriverCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("DriverCamera"));
 	DriverCamera->SetupAttachment(Mesh);
-	DriverCamera->SetRelativeLocation(FVector(-150.f, 0.f, 150.f));
+	DriverCamera->SetRelativeLocation(FVector(-450.f, 0.f, 250.f));
 	DriverCamera->SetRelativeRotation(FRotator(-10.f, 0.f, 0.f));
 
 	// Input built in the constructor via CreateDefaultSubobject, not BeginPlay via
