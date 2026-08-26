@@ -1,4 +1,5 @@
 #include "CampaignSubsystem.h"
+#include "OurBlock.h"
 
 namespace
 {
@@ -45,6 +46,8 @@ void UCampaignSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
 	State = campaign::New();
+	UE_LOG(LogOurBlock, Log, TEXT("UCampaignSubsystem initialized: %d alive, chapter %d"),
+		static_cast<int32>(State.Alive.size()), State.Chapter);
 }
 
 ECampaignError UCampaignSubsystem::SpendEvening(FName Member)

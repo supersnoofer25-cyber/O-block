@@ -125,16 +125,28 @@ tuning number, which needs an engine to test (see below).
   `UnrealEditor-Cmd.exe OurBlock.uproject -ExecCmds="Automation RunTests
   OurBlock.Campaign; Quit" -unattended -nopause -nullrhi` — passed, proving the ported
   rules produce correct results compiled by MSVC under UE's settings, not just under
-  the `clang++` build that's the actual specification. `UCampaignSubsystem` itself
-  isn't exercised by that test — it needs a real `UGameInstance`, which needs a PIE
-  session, which needs a level, none of which exist yet.
+  the `clang++` build that's the actual specification.
+- **`UCampaignSubsystem` is confirmed running for real**, not just at the C++ level.
+  `Content/Maps/TestLevel.umap` is a flat plane and a `PlayerStart`, nothing else —
+  created by `Content/Python/create_test_level.py`, kept as a reproducible script
+  rather than undocumented manual editor clicking. Launching the actual game against it
+  (`UnrealEditor-Cmd.exe OurBlock.uproject /Game/Maps/TestLevel -game -nullrhi
+  -unattended -ExecCmds="quit"`) logs `UCampaignSubsystem initialized: 8 alive, chapter
+  1` and loads the map clean, with no errors anywhere in the run. That closes the gap
+  the automation test couldn't reach: a `UGameInstanceSubsystem` only initializes once a
+  real `UGameInstance` exists, which needs a level, which now exists.
+
+  **Gotcha hit along the way**: Git Bash mangles a bare `/Game/...` engine content path
+  into a Windows filesystem path before Unreal ever sees it (MSYS argv conversion).
+  Prefix the command with `MSYS2_ARG_CONV_EXCL="*"` when passing one from this shell.
 
 ### The next decision
 
-**Give the project something to actually play.** The rules module now runs correctly
-inside Unreal; what doesn't exist yet is a `Content/` folder, a level, or anything that
-would let a PIE session instantiate `UCampaignSubsystem` for real. The concrete next
-unit of work is still producing a `CompanionReturned` the way
+**Build the actual encounter.** The rules module runs correctly inside Unreal and a
+`UGameInstance` can now instantiate `UCampaignSubsystem` for real — the plumbing this
+project needed is done. `TestLevel` is deliberately not a real level: a plane and a
+`PlayerStart` prove PIE works, nothing more. The concrete next unit of work is still
+producing a `CompanionReturned` the way
 [ADR 0015](docs/adr/0015-the-encounter-earns-survival-it-does-not-roll-it.md) describes
 — a per-bip danger tally, denied by the player's own skill, never a roll — but that now
 means building an actual encounter (level geometry, a companion, something to shoot),
