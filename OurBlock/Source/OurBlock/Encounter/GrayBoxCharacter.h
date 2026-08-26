@@ -10,10 +10,12 @@ class UInputMappingContext;
 class UInputAction;
 
 // The player, gray-boxed: WASD, mouselook, and a fire trace that denies whatever
-// ThreatActor it hits. No weapon model, no animation, no bike - ADR 0004's seat choice
-// doesn't exist yet either, since there's no bike to sit on. This stands in for
-// "riding, on the back" only in the loosest sense: aiming and firing at threats is the
-// verb being tested, not which seat the player is nominally in.
+// ThreatActor it hits. No weapon model, no animation. This is the "on the back"
+// half of ADR 0004's seat choice - aiming and firing while attached to a moving
+// ADirtBike's passenger seat (AttachToBikeSeat) - the "riding" half is ADirtBike
+// itself, a separate pawn the player possesses directly, since driving and shooting
+// are different enough verbs that forcing them onto one pawn would blur exactly the
+// distinction ADR 0004 is built on.
 //
 // Input is built entirely in C++ in the constructor (as default subobjects - see the
 // .cpp for why it can't be BeginPlay) rather than from a Content-asset input mapping,
@@ -32,6 +34,14 @@ public:
 	// real failure mode (missing, being out of range), not this specific number.
 	UPROPERTY(EditAnywhere, Category = "Encounter")
 	float FireRange = 5000.f;
+
+	// Attaches to a bike's passenger seat and turns off walking - movement input still
+	// arrives (nothing unbinds it) but AddMovementInput has nowhere to go once the
+	// movement component is disabled, so it's inert rather than fighting the
+	// attachment. Look and Fire are untouched, since the whole point of this seat is
+	// that they still work while the bike moves.
+	UFUNCTION(BlueprintCallable, Category = "Encounter")
+	void AttachToBikeSeat(class ADirtBike* Bike);
 
 protected:
 	virtual void BeginPlay() override;

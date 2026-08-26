@@ -1,5 +1,6 @@
 #include "GrayBoxCharacter.h"
 #include "ThreatActor.h"
+#include "DirtBike.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/InputComponent.h"
@@ -130,6 +131,29 @@ void AGrayBoxCharacter::ApplyMappingContextIfReady()
 	}
 	PC->SetInputMode(FInputModeGameOnly());
 	PC->bShowMouseCursor = false;
+}
+
+void AGrayBoxCharacter::AttachToBikeSeat(ADirtBike* Bike)
+{
+	if (!Bike)
+	{
+		return;
+	}
+
+	USceneComponent* Seat = Bike->GetSeatComponent(EBikeSeat::Passenger);
+	if (!Seat)
+	{
+		return;
+	}
+
+	// Movement mode has to go to None, not just have input ignored - a Walking capsule
+	// still tries to resolve overlaps/floor collision against the moving bike under
+	// it, which fights the attachment instead of riding along with it.
+	GetCharacterMovement()->SetMovementMode(MOVE_None);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	AttachToComponent(Seat, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	SetActorRelativeLocation(FVector::ZeroVector);
+	SetActorRelativeRotation(FRotator::ZeroRotator);
 }
 
 void AGrayBoxCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
