@@ -160,32 +160,60 @@ tuning number, which needs an engine to test (see below).
   The tally/threat logic is verified headlessly (`EncounterPortTest.cpp`,
   `OurBlock.Encounter.*`, four tests — denial adds nothing, firing adds exactly its
   weight, firing is irreversible, outcome is a deterministic threshold not a roll) the
-  same way as `OurBlock.Campaign`'s suite. What a test *can't* answer — whether denying
-  a threat in time actually feels different from not — needs an actual human to press
-  Play: `Content/Maps/TestLevel.umap` has `ACompanionStandIn` at the origin and three
-  `AThreatActor`s around it (`Content/Python/populate_test_encounter.py`), each on a
-  three-second fuse. Open the project in the editor and press Play, or run
-  `UnrealEditor.exe OurBlock.uproject` and Play-In-Editor on `TestLevel`.
+  same way as `OurBlock.Campaign`'s suite. `Content/Maps/TestLevel.umap` has
+  `ACompanionStandIn` near the origin and three `AThreatActor`s around it
+  (`Content/Python/populate_test_encounter.py`), a `PlayerStart` well clear of them
+  facing the group, a movable sun and sky light, and `AGrayBoxHUD` drawing a plain
+  crosshair. Open the project and press Play, or run `UnrealEditor.exe
+  OurBlock.uproject` and Play-In-Editor on `TestLevel`.
 
-  **Gotcha hit along the way**: a level's own World Settings → GameMode Override takes
-  priority over `DefaultEngine.ini`'s `GlobalDefaultGameMode` unconditionally.
-  `TestLevel` was created before `AGrayBoxGameMode` existed, so its override was still
-  unset and the game silently fell back to bare `GameModeBase` (no pawn class, no
-  input) even with the ini set correctly. Fixed by setting the level's own override
-  directly (`Content/Python/set_test_level_gamemode.py`) rather than trusting the
-  project-wide default alone.
+  **A human has actually played it and it works.** Aim the crosshair at a sphere and
+  click before its fuse runs out — denied, it vanishes for nothing; missed, it fires
+  and the tally moves, invisibly, exactly as ADR 0015 specifies. First playtest
+  feedback: 3s felt too fast to react to, 10s (only used to isolate bugs, see below)
+  felt like no pressure at all. Currently sitting at 5s
+  (`Content/Python/set_fuse_timing.py`) as a first real data point, not a final answer —
+  `AThreatActor::TimeToFire` and `UDangerTallyComponent::Threshold` are both still
+  placeholders meant to keep moving until the timing actually feels tense rather than
+  either trivial or unfair.
+
+  **Gotchas hit getting from "compiles" to "actually playable"** — worth knowing before
+  touching this code again, since none of them produced an error message that pointed
+  at the actual cause:
+  - A level's own World Settings → GameMode Override takes priority over
+    `DefaultEngine.ini`'s `GlobalDefaultGameMode` unconditionally. `TestLevel` predated
+    `AGrayBoxGameMode`, so it silently ran bare `GameModeBase` (no pawn, no input) even
+    with the ini set correctly, until the level's own override was set directly
+    (`Content/Python/set_test_level_gamemode.py`).
+  - `TestLevel` needs its own light — Lumen GI with zero lights in the level renders as
+    an effectively black scene.
+  - `AGameModeBase::RestartPlayer` spawns the pawn (running `BeginPlay`) *before*
+    calling `Possess()` on it — and separately, `SetupPlayerInputComponent` (called
+    during possession) also runs *before* `BeginPlay`. An `EnhancedInputComponent`
+    `BindAction` against a still-null `UInputAction` silently binds nothing, so input
+    actions have to exist by construction time, not `BeginPlay`, or controls look
+    wired up but do nothing with no error anywhere.
+  - Inside an `AActor` constructor, `NewObject<T>(this)` for anything meant to persist
+    (like those input actions) hard-crashes — the engine requires
+    `CreateDefaultSubobject<T>(Name)` instead, the sanctioned way to create *any*
+    `UObject` subobject from a constructor, not just components.
+  - `UCameraComponent` doesn't follow the controller's pitch by default, only whatever
+    rotation it inherits from its attach parent — `bUsePawnControlRotation = true` is
+    what makes vertical mouselook actually move the camera.
+  - `unreal.Rotator`'s Python constructor takes positional args as **(Roll, Pitch,
+    Yaw)**, not `(Pitch, Yaw, Roll)`. Confirmed by reading a saved value back rather
+    than assuming — `Rotator(0, 90, 0)` intended as yaw silently became pitch, pointing
+    a spawned actor straight up instead of at anything.
 
 ### The next decision
 
-**Play the gray-box and judge whether the mechanic is worth building for real.** The
-logic is verified; the feel isn't, and only a human walking up to `ACompanionStandIn`
-and deciding whether to shoot each `AThreatActor` before its three seconds run out can
-answer that. If it's not landing, the two levers ADR 0015 itself names are the fuse
-timing (`AThreatActor::TimeToFire`) and the threshold
-(`UDangerTallyComponent::Threshold`) — both placeholders, both meant to move. Once the
-shape feels right, replacing the gray-box actors with real ones (bike, seat, companion
-AI, real weapons) is production work, not a design question — ADR 0015 already settled
-what the mechanism is, this only tests whether it's the right one.
+**Keep tuning the fuse and threshold by playing, then decide if the mechanic is worth
+building for real.** The gray-box works end to end and one round of feedback has
+already moved the fuse from 3s to 5s; more playthroughs at different `TimeToFire` /
+`Threshold` values are what actually answers spec.md's open question 2, not more code.
+Once the timing feels right, replacing the gray-box actors with real ones (bike, seat,
+companion AI, real weapons) is production work, not a design question — ADR 0015
+already settled what the mechanism is, this only tests whether it's the right one.
 
 ### Toolchain — what's installed where this was last worked on
 
