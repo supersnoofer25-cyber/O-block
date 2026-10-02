@@ -111,6 +111,7 @@ void ADirtBike::ApplyMappingContextIfReady()
 				LocalPlayer->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>())
 		{
 			Subsystem->AddMappingContext(MappingContext, 0);
+			UE_LOG(LogOurBlock, Log, TEXT("DirtBike: mapping context added"));
 		}
 	}
 	PC->SetInputMode(FInputModeGameOnly());
