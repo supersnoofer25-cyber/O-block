@@ -222,7 +222,7 @@ tuning number, which needs an engine to test (see below).
   player spawns attached to a placeholder-driven bike's passenger seat, zero errors.
 
 - **The "exposure, not aim" denial mode exists for the riding seat** (ADR 0015), built
-  and unit-tested but **not yet playtested**. When the player rides, the companion on
+  and unit-tested; the bike has been driven but the threats not yet judged (see below). When the player rides, the companion on
   the back shoots with fixed competence, so there's nothing to click — the player's
   only lever is route and timing. `AThreatActor` now has `EThreatDenial`:
   - `Aimed` — the original click-to-deny fuse, unchanged.
@@ -249,6 +249,23 @@ tuning number, which needs an engine to test (see below).
   **Known gap**: the floor is flat with no cover, so right now only distance can break
   a sightline — route can't. That makes this a test of the clock, not of the actual
   "never give it the angle" skill, until there's level geometry to hide behind.
+
+  **First play of the riding seat**: the bike now drives (W/S throttle and brake, A/D
+  steer — steering only works while rolling, on purpose, and a human confirmed that
+  feels right). The exposure threats themselves haven't been judged yet.
+
+  **Gotcha hit getting it to drive** — another one with no error message pointing at
+  the cause: on first play nothing responded at all, which looked like broken input.
+  It wasn't. `ACompanionStandIn` kept its `BlockAllDynamic` collision after attaching
+  to the back seat, and its cube overlaps the bike's body. **Unreal does not exempt an
+  attached actor from its parent's movement sweep**, so `ADirtBike::Tick`'s swept move
+  hit its own passenger every frame, zeroed `CurrentSpeed`, and — since steering needs
+  speed — nothing moved or turned. Fixed by turning the stand-in's collision off on
+  attach, the same as `AGrayBoxCharacter` already did with its capsule. Anything
+  attached to the bike later (a real companion, props) needs the same treatment, or
+  `IgnoreActorWhenMoving`. `ADirtBike` now logs `DirtBike: mapping context added`, so
+  if input ever seems dead again, check the log first: that line present means input
+  is fine and something is blocking movement.
 
 ### The next decision
 
