@@ -17,25 +17,33 @@ bool AScriptedDrive::Start(const FString& InMode, ADirtBike* InBike, UDangerTall
 	Tally = InTally;
 
 	// The threats populate_exposure_test.py places are at (600,1400), (-700,1900) and
-	// (1300,2400). (300,-100) is just a lane change, clear of the origin cluster's
-	// cube at (0,0) and spheres at (600,0)/(0,600). (300,1900) is within ExposureRange
-	// of all three threats; (300,4000) is well past the last one's range, and the
-	// longest any of them keeps the angle at full speed along X=300 is about 2.5s.
-	const FVector2D LaneChange(300.f, -100.f);
+	// (1300,2400). Why a stop at Y=600 on the X=300 lane is exposed to one threat and
+	// Y=1900 hidden from all three is add_cover.py's layout - see there. Y=4000 is well
+	// past the last threat's range, and the longest any of them can keep the angle at
+	// full speed along the lane is about 2.5s.
 	if (Mode == TEXT("park"))
 	{
+		bDrives = false;
+		ExpectedFired = 0;
 	}
-	else if (Mode == TEXT("camp"))
+	else if (Mode == TEXT("exposed"))
 	{
-		Route = { LaneChange, FVector2D(300.f, 1900.f) };
+		StopY = 600.f;
+		ExpectedFired = 1;
+	}
+	else if (Mode == TEXT("hide"))
+	{
+		StopY = 1900.f;
+		ExpectedFired = 0;
 	}
 	else if (Mode == TEXT("pass"))
 	{
-		Route = { LaneChange, FVector2D(300.f, 4000.f) };
+		StopY = 4000.f;
+		ExpectedFired = 0;
 	}
 	else
 	{
-		UE_LOG(LogOurBlock, Error, TEXT("ScriptedDrive: unknown mode '%s' (expected park, camp or pass)"), *InMode);
+		UE_LOG(LogOurBlock, Error, TEXT("ScriptedDrive: unknown mode '%s' (expected park, exposed, hide or pass)"), *InMode);
 		return false;
 	}
 
@@ -69,7 +77,7 @@ void AScriptedDrive::Tick(float DeltaSeconds)
 
 	Elapsed += DeltaSeconds;
 
-	if (Route.Num() > 0 && !bArrived)
+	if (bDrives && !bArrived)
 	{
 		Steer();
 	}
@@ -97,18 +105,6 @@ void AScriptedDrive::Steer()
 	const FVector Loc = B->GetActorLocation();
 	const float Speed = B->GetCurrentSpeed();
 
-	// Every route here runs in +Y, so "passed a waypoint" is just "got level with it" -
-	// sturdier than a radius check, which a bike with a wide turning circle can orbit.
-	const bool bLast = RouteIndex == Route.Num() - 1;
-	if (!bLast && Loc.Y >= Route[RouteIndex].Y)
-	{
-		++RouteIndex;
-		return;
-	}
-	const FVector2D Target = Route[RouteIndex];
-	const FVector2D ToTarget = Target - FVector2D(Loc.X, Loc.Y);
-	const float Distance = ToTarget.Size();
-
 	// ADirtBike::Tick zeroes speed on any blocking hit, so throttle held past the first
 	// second with speed still at zero means something is in the way. Say so once,
 	// rather than leaving a run that silently sat still to be read as a clean result.
@@ -122,7 +118,7 @@ void AScriptedDrive::Steer()
 	// Brake once the remaining distance is about what braking needs (v^2 / 2a), then
 	// let go the moment speed hits zero - holding brake past that point reverses.
 	const float StoppingDistance = (Speed * Speed) / (2.f * B->Acceleration);
-	if (bLast && Distance <= StoppingDistance + 50.f)
+	if (StopY - Loc.Y <= StoppingDistance + 50.f)
 	{
 		if (Speed > 0.f)
 		{
@@ -137,6 +133,14 @@ void AScriptedDrive::Steer()
 		}
 		return;
 	}
+
+	// Follow the lane by always aiming at a point on it a fixed distance ahead, rather
+	// than at discrete waypoints: the first version steered at a lane-change waypoint
+	// and then the stop point, and with a 90 deg/s turn rate at full speed it swung
+	// out to X~590 and clipped the end of a cover wall. Aiming ahead along the lane
+	// eases onto it and stays there.
+	const FVector2D Ahead(LaneX, FMath::Min(Loc.Y + LookAhead, StopY));
+	const FVector2D ToTarget = Ahead - FVector2D(Loc.X, Loc.Y);
 
 	// Positive yaw is a right turn (ADirtBike::Tick's TurnRight adds positive yaw).
 	const float DesiredYaw = FMath::RadiansToDegrees(FMath::Atan2(ToTarget.Y, ToTarget.X));
@@ -181,8 +185,12 @@ void AScriptedDrive::Finish()
 	}
 
 	const UDangerTallyComponent* TallyComp = Tally.Get();
-	UE_LOG(LogOurBlock, Display, TEXT("ScriptedDrive[%s] RESULT: %d of %d exposure threats fired, companion tally %d (threshold %d)"),
-		*Mode, Fired, ExposureThreats.Num(), TallyComp ? TallyComp->Tally : -1, TallyComp ? TallyComp->Threshold : -1);
+	// A run that got stuck can't pass, whatever it counted - it never drove the route
+	// the expectation was written for.
+	const bool bPass = Fired == ExpectedFired && !bReportedBlocked;
+	UE_LOG(LogOurBlock, Display, TEXT("ScriptedDrive[%s] RESULT %s: %d of %d exposure threats fired (expected %d), companion tally %d (threshold %d)"),
+		*Mode, bPass ? TEXT("PASS") : TEXT("FAIL"), Fired, ExposureThreats.Num(), ExpectedFired,
+		TallyComp ? TallyComp->Tally : -1, TallyComp ? TallyComp->Threshold : -1);
 
 	FPlatformMisc::RequestExit(false);
 }
