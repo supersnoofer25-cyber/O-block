@@ -238,14 +238,16 @@ tuning number, which needs an engine to test (see below).
   (`ExposureSustainedLongEnoughFires`, `ExposureBreakingSightlineResetsTheClock`)
   bring `OurBlock.Encounter` to six, all passing.
 
-  **`bPlayerRides` now defaults to `true`.** In that mode the back seat gets
+  **`bPlayerRides` — currently `false` again** (see "The next decision"); it was `true`
+  for all of the riding-seat work below. With it `true`, the back seat gets
   `ACompanionStandIn` (so threats have a real tally to target), and
   `AGrayBoxGameMode::WireUnaimedExposureThreats` points any Exposure threat without a
   `Target` at it once it spawns — it can't be wired at level-edit time because it
   doesn't exist until runtime. `Content/Python/populate_exposure_test.py` places three
   Exposure threats along a driving line north of the origin cluster, one near the
-  range cutoff. Flip `bPlayerRides` back to `false` and rebuild to return to the
-  click-to-deny setup.
+  range cutoff. With it `false`, those three threats are never wired to anything and
+  sit inert, and the scripted drive never spawns — flip it to `true` and rebuild to
+  drive or to rerun the drives.
 
   **Known gap, since closed**: the floor started flat with no cover, so only distance
   could break a sightline — route couldn't. Cover now exists (see the cover entry
@@ -256,9 +258,13 @@ tuning number, which needs an engine to test (see below).
   key for both, like most driving games; a human noticed and said it's fine for now.
   A/D steer, only while rolling, on purpose — also confirmed by a human as feeling
   right. The exposure threats' mechanics are verified by the scripted drive (below).
-  Played again once cover existed: the human's verdict was "looks fine". That says it
-  works, not yet whether it's *tense* — whether the walls actually changed how they
-  drove is still the open question.
+  Played twice more once cover existed — the second time with the on-screen "fired"
+  text gone — and the human's verdicts were "looks fine" and "good". Taken as: the
+  riding seat is in decent shape for now. **Still unanswered directly**: whether the
+  walls actually changed how they drove (slowed down, stopped behind one, picked a
+  line). Asked twice, answered in general terms both times. Whoever plays it next,
+  watch for that specifically — if the walls get ignored, the fix is more threats or
+  cover, not retuning the 5s fuse.
 
   **Gotcha hit getting it to drive** — another one with no error message pointing at
   the cause: on first play nothing responded at all, which looked like broken input.
@@ -336,16 +342,16 @@ tuning number, which needs an engine to test (see below).
 
 ### The next decision
 
-**Play the riding seat, now that it has cover.** The scripted drives have settled
-everything a script can: exposure mode works, and cover breaks a sightline. What's
-left is the part only a human can judge — whether using the walls feels like hiding,
-whether 5s/1500 units feels tense or trivial, and whether the player can tell
-what's dangerous with no meter (none may ever be added). Expect three walls to be
-thin; if it's inconclusive because there's too little to hide behind, add more cover
-before retuning numbers. Rerun the four scripted drives after any level change. The other thread is unchanged: the "player on the back"
-fuse/threshold still needs tuning by play (spec.md open question 2) — just flip
-`bPlayerRides` back to do it. Don't tune both seats in the same session; one thing to
-judge at a time.
+**Tune the "player on the back" fuse by playing it.** The riding seat is parked in
+decent shape (see its entry above, including the one question it left open), and
+`bPlayerRides` is back to `false`: the player rides on the back of a
+placeholder-driven bike and clicks threats near the origin before they fire. That
+seat's `AThreatActor::TimeToFire` sits at 5s (`set_fuse_timing.py`) after 3s felt too
+fast and 10s felt like no pressure; `UDangerTallyComponent::Threshold` is 3. Both are
+placeholders — spec.md open question 2 only gets answered by playing until the timing
+feels tense rather than trivial or unfair. Don't touch the riding seat in the same
+session; one thing to judge at a time. To go back to it, flip `bPlayerRides` to
+`true` and rebuild (that's also what rerunning the four scripted drives needs).
 
 ### Toolchain — what's installed where this was last worked on
 

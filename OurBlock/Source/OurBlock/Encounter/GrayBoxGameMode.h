@@ -21,10 +21,14 @@ public:
 
 	// ADR 0004's per-bip seat choice, as a config toggle rather than a menu - there's
 	// no prep screen to choose it from yet. false (on the back, shooting) was the
-	// configuration playtested first. Now flipped to true: driving with a companion
-	// returning fire on the back is the half of ADR 0015 that had never been tested
-	// at all, and populate_exposure_test.py's route only makes sense in this mode.
-	// Flip back to false and rebuild to return to the click-to-deny configuration.
+	// configuration playtested first; it was then flipped to true to build and play
+	// the riding seat (Exposure mode, cover, the scripted drive). That seat played
+	// "fine"/"good", so this is back to false for tuning the click-to-deny fuse
+	// (spec.md open question 2) - one seat tuned at a time.
+	//
+	// Flip to true and rebuild to drive again. The scripted drive (-ScriptedDrive=)
+	// only runs in that mode - with this false it never spawns, so rerunning the four
+	// drives means flipping this first.
 	//
 	// Whichever seat the player doesn't take gets a placeholder occupant, not a real
 	// companion - ADR 0004 itself names companion AI as load-bearing and non-trivial,
@@ -40,7 +44,7 @@ public:
 	// ACompanionStandIn - the tally-holding placeholder, not a character - so
 	// AThreatActor has something real to target in EThreatDenial::Exposure mode.
 	UPROPERTY(EditAnywhere, Category = "Encounter")
-	bool bPlayerRides = true;
+	bool bPlayerRides = false;
 
 protected:
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
