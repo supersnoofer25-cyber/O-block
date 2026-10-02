@@ -222,9 +222,10 @@ tuning number, which needs an engine to test (see below).
   player spawns attached to a placeholder-driven bike's passenger seat, zero errors.
 
 - **The "exposure, not aim" denial mode exists for the riding seat** (ADR 0015), built
-  and unit-tested; the bike has been driven but the threats not yet judged (see below). When the player rides, the companion on
-  the back shoots with fixed competence, so there's nothing to click — the player's
-  only lever is route and timing. `AThreatActor` now has `EThreatDenial`:
+  and unit-tested, mechanics verified in the real level by the scripted drive, how it
+  feels not yet judged (see below). When the player rides, the companion on the back
+  shoots with fixed competence, so there's nothing to click — the player's only lever
+  is route and timing. `AThreatActor` now has `EThreatDenial`:
   - `Aimed` — the original click-to-deny fuse, unchanged.
   - `Exposure` — the threat's clock only runs while it has a clear line of sight to
     the companion within `ExposureRange` (default 1500). It fires when the clock
@@ -252,7 +253,8 @@ tuning number, which needs an engine to test (see below).
 
   **First play of the riding seat**: the bike now drives (W/S throttle and brake, A/D
   steer — steering only works while rolling, on purpose, and a human confirmed that
-  feels right). The exposure threats themselves haven't been judged yet.
+  feels right). The exposure threats' mechanics are now verified by the scripted drive
+  (below), but how they feel hasn't been judged yet.
 
   **Gotcha hit getting it to drive** — another one with no error message pointing at
   the cause: on first play nothing responded at all, which looked like broken input.
@@ -267,16 +269,55 @@ tuning number, which needs an engine to test (see below).
   if input ever seems dead again, check the log first: that line present means input
   is fine and something is blocking movement.
 
+- **A scripted drive checks the exposure mode without a human** (`AScriptedDrive`,
+  `Encounter/ScriptedDrive.h`). It's a dev harness, not part of the game: launched with
+  `-ScriptedDrive=<mode>`, it drives the bike along a fixed route through the bike's
+  own held-key flags (so it runs exactly the movement code a player does), logs each
+  exposure threat's distance and clock once a second, prints a `RESULT` line, and
+  quits. Without the flag, nothing spawns it. Runs headless in seconds:
+
+  ```
+  UnrealEditor-Cmd.exe OurBlock.uproject /Game/Maps/TestLevel -game -nullrhi
+      -unattended -nosplash -benchmark -fps=60 -ScriptedDrive=camp
+  ```
+
+  `-benchmark -fps=60` fixes the timestep so results don't depend on machine speed.
+  The editor must be closed to build it (it's a new class — Live Coding can't add
+  one). All three modes came out as predicted:
+  - `park` (never moves) — 0 of 3 fired; all are out of range of the start.
+  - `camp` (drives in among them and stops) — 3 of 3 fired, each about 5s after it
+    first got the angle; the tally hit the threshold, so the companion would be lost.
+  - `pass` (full speed straight through) — 0 of 3 fired; two clocks got to 1.5s and
+    reset to zero on leaving range.
+
+  So range cutoff, sightline trace, runtime target wiring and reset-on-break all work
+  in the real level, not just in the unit tests. The route takes the X=300 lane on
+  purpose — X=0 runs into the click-to-deny cluster's companion cube at the origin,
+  which stopped the first version dead. It logs a `BLOCKED` warning if it's ever stuck,
+  so a run that silently sat still can't read as a clean result.
+
+  **What it found — a design signal, not yet a decision**: at full speed the bike
+  crosses a threat's whole range in about 2.5s, half its 5s fuse. On open ground,
+  keeping moving is always safe; the only way to lose the companion is to stop or
+  circle. That matches the "known gap" above, now with evidence behind it.
+
+  **Also noticed, not yet fixed**: `AThreatActor::Fire()` puts a red "ThreatActor_N
+  fired" debug message on screen. It's gray-box debug output, but it tells the player
+  something the design says they must never see — remove it once debugging is done.
+
 ### The next decision
 
-**Play the riding seat.** Drive the route on `TestLevel` and see whether the exposure
-threats feel like pressure or noise — that's the only way to learn whether the
-reset-not-pause rule and the 5s/1500-unit numbers are anywhere near right. Expect the
-flat floor to limit what this can tell you; if it's inconclusive for that reason, the
-next step is a few blocks of cover geometry, not retuning numbers. The other thread is
-unchanged: the "player on the back" fuse/threshold still needs tuning by play (spec.md
-open question 2) — just flip `bPlayerRides` back to do it. Don't tune both seats in
-the same session; one thing to judge at a time.
+**Add cover to `TestLevel`, then play the riding seat.** The scripted drive settled
+the mechanics: exposure mode works. It also showed that on the flat floor there's no
+real decision to make — moving is always safe — so playing it as-is would mostly
+confirm that. A few blocks of cover geometry along the route, forcing the player to
+slow down and pick a line, is what turns "keep moving" into "never give it the
+angle". Rerun the scripted drives after adding cover (the route may need new
+waypoints around it), then play. Retune the 5s/1500-unit numbers only after that, if
+it still doesn't feel right. The other thread is unchanged: the "player on the back"
+fuse/threshold still needs tuning by play (spec.md open question 2) — just flip
+`bPlayerRides` back to do it. Don't tune both seats in the same session; one thing to
+judge at a time.
 
 ### Toolchain — what's installed where this was last worked on
 
