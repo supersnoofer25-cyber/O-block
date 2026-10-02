@@ -73,7 +73,7 @@ that mistake was made once already and nearly cut the campaign on bad evidence.
 progress bar, no survivor tally, no timer, no visit allowance. This is four separate ADRs
 agreeing, and it is the most common way a well-meant change breaks the design.
 
-## Current state — 2026-08-26
+## Current state — 2026-10-01
 
 Design is closed. Every open question in `spec.md` §11 is answered except the actual
 tuning number, which needs an engine to test (see below).
@@ -218,25 +218,48 @@ tuning number, which needs an engine to test (see below).
   itself, as a config toggle rather than a prep-screen menu that doesn't exist yet.
   Whichever seat the player doesn't take gets a placeholder occupant, deliberately not
   real companion AI — ADR 0004 names that as its own load-bearing, non-trivial work.
-  Verified via a headless boot with the default config (`bPlayerRides = false`): player
-  spawns attached to a placeholder-driven bike's passenger seat, zero errors.
+  Verified via a headless boot with `bPlayerRides = false` (the default at the time):
+  player spawns attached to a placeholder-driven bike's passenger seat, zero errors.
 
-  **Deliberately not built yet**: the "exposure, not aim" denial mechanic ADR 0015
-  describes for when the player rides — that seat is now physically wired up (you can
-  toggle `bPlayerRides = true` and rebuild to sit in it), but nothing yet makes threats
-  behave differently for a moving companion-gunner than they did for the stationary
-  gray-box. That's a real design question, not a quick follow-on.
+- **The "exposure, not aim" denial mode exists for the riding seat** (ADR 0015), built
+  and unit-tested but **not yet playtested**. When the player rides, the companion on
+  the back shoots with fixed competence, so there's nothing to click — the player's
+  only lever is route and timing. `AThreatActor` now has `EThreatDenial`:
+  - `Aimed` — the original click-to-deny fuse, unchanged.
+  - `Exposure` — the threat's clock only runs while it has a clear line of sight to
+    the companion within `ExposureRange` (default 1500). It fires when the clock
+    reaches `TimeToFire`. Breaking the sightline *resets* the clock to zero rather than
+    pausing it, so ducking out of view even briefly buys a clean slate.
+
+  The tally, threshold and `Fire()` are shared by both modes. The clock logic is
+  `TickExposure(DeltaSeconds, bHasSightline)`, kept apart from the world trace in
+  `Tick()` so it tests without a World — two new tests
+  (`ExposureSustainedLongEnoughFires`, `ExposureBreakingSightlineResetsTheClock`)
+  bring `OurBlock.Encounter` to six, all passing.
+
+  **`bPlayerRides` now defaults to `true`.** In that mode the back seat gets
+  `ACompanionStandIn` (so threats have a real tally to target), and
+  `AGrayBoxGameMode::WireUnaimedExposureThreats` points any Exposure threat without a
+  `Target` at it once it spawns — it can't be wired at level-edit time because it
+  doesn't exist until runtime. `Content/Python/populate_exposure_test.py` places three
+  Exposure threats along a driving line north of the origin cluster, one near the
+  range cutoff. Flip `bPlayerRides` back to `false` and rebuild to return to the
+  click-to-deny setup.
+
+  **Known gap**: the floor is flat with no cover, so right now only distance can break
+  a sightline — route can't. That makes this a test of the clock, not of the actual
+  "never give it the angle" skill, until there's level geometry to hide behind.
 
 ### The next decision
 
-**Two threads, either is legitimate next work.** (1) Keep tuning the fuse/threshold by
-playing the already-working "player on the back" configuration — spec.md's open
-question 2 only gets answered by playing, not by more code. (2) Design and build the
-"player rides, companion shoots with fixed competence, denial is about exposure not
-aim" mechanic ADR 0015 describes for the other seat — genuinely new design work, not
-an extension of the existing `Deny()`-on-click system. Either is a reasonable place to
-pick up; building both bike movement *and* a new mechanic in the same pass is how this
-turns into more than one thing to debug at once.
+**Play the riding seat.** Drive the route on `TestLevel` and see whether the exposure
+threats feel like pressure or noise — that's the only way to learn whether the
+reset-not-pause rule and the 5s/1500-unit numbers are anywhere near right. Expect the
+flat floor to limit what this can tell you; if it's inconclusive for that reason, the
+next step is a few blocks of cover geometry, not retuning numbers. The other thread is
+unchanged: the "player on the back" fuse/threshold still needs tuning by play (spec.md
+open question 2) — just flip `bPlayerRides` back to do it. Don't tune both seats in
+the same session; one thing to judge at a time.
 
 ### Toolchain — what's installed where this was last worked on
 
