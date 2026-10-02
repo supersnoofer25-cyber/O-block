@@ -68,6 +68,50 @@ bool FFiringIsFinalTest::RunTest(const FString& Parameters)
 	return true;
 }
 
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FExposureBreakingSightlineResetsTheClockTest, "OurBlock.Encounter.ExposureBreakingSightlineResetsTheClock",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::ProductFilter)
+
+bool FExposureBreakingSightlineResetsTheClockTest::RunTest(const FString& Parameters)
+{
+	// The riding seat's whole mechanic (ADR 0015): a threat that nearly had enough
+	// sustained sightline to fire, then loses it, must not carry that progress into
+	// the next time it re-acquires an angle - a clean break is a clean reset, not a
+	// pause, or "never giving it the angle" would stop meaning what it says.
+	UDangerTallyComponent* Tally = NewObject<UDangerTallyComponent>();
+	AThreatActor* Threat = NewObject<AThreatActor>();
+	Threat->DenialMode = EThreatDenial::Exposure;
+	Threat->TimeToFire = 3.0f;
+	Threat->Target = Tally;
+
+	Threat->TickExposure(2.9f, true); // almost there
+	Threat->TickExposure(1.0f, false); // breaks - resets, not pauses
+	Threat->TickExposure(2.9f, true); // alone, still short of 3.0f again
+
+	if (!TestFalse(TEXT("threat has not fired - no single unbroken window reached TimeToFire"), Threat->HasFired())) return false;
+	if (!TestEqual(TEXT("tally untouched"), Tally->Tally, 0)) return false;
+	return true;
+}
+
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FExposureSustainedLongEnoughFiresTest, "OurBlock.Encounter.ExposureSustainedLongEnoughFires",
+	EAutomationTestFlags::EditorContext | EAutomationTestFlags::ProductFilter)
+
+bool FExposureSustainedLongEnoughFiresTest::RunTest(const FString& Parameters)
+{
+	UDangerTallyComponent* Tally = NewObject<UDangerTallyComponent>();
+	AThreatActor* Threat = NewObject<AThreatActor>();
+	Threat->DenialMode = EThreatDenial::Exposure;
+	Threat->TimeToFire = 3.0f;
+	Threat->Target = Tally;
+
+	Threat->TickExposure(1.5f, true);
+	if (!TestFalse(TEXT("not yet - short of TimeToFire"), Threat->HasFired())) return false;
+
+	Threat->TickExposure(1.5f, true); // 3.0f total, unbroken
+	if (!TestTrue(TEXT("fires once sustained sightline reaches TimeToFire"), Threat->HasFired())) return false;
+	if (!TestEqual(TEXT("tally moved by this threat's weight"), Tally->Tally, 1)) return false;
+	return true;
+}
+
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FTallyOutcomeIsAThresholdNotARollTest, "OurBlock.Encounter.TallyOutcomeIsAThresholdNotARoll",
 	EAutomationTestFlags::EditorContext | EAutomationTestFlags::ProductFilter)
 

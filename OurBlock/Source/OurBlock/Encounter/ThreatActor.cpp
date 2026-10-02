@@ -8,7 +8,10 @@
 
 AThreatActor::AThreatActor()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	// Always ticks: cheap for a gray-box's handful of threats, and it means Exposure
+	// mode is just a config toggle (DenialMode, an EditAnywhere property) rather than
+	// something that has to flip PrimaryActorTick.bCanEverTick at BeginPlay to match.
+	PrimaryActorTick.bCanEverTick = true;
 
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = Mesh;
@@ -24,7 +27,53 @@ AThreatActor::AThreatActor()
 void AThreatActor::BeginPlay()
 {
 	Super::BeginPlay();
-	GetWorldTimerManager().SetTimer(FireTimer, this, &AThreatActor::Fire, TimeToFire, false);
+
+	// Exposure mode has no fixed fuse from spawn - it fires from sustained sightline,
+	// tracked in Tick() - so starting FireTimer here would fire it regardless of
+	// whether the player ever gave it an angle.
+	if (DenialMode == EThreatDenial::Aimed)
+	{
+		GetWorldTimerManager().SetTimer(FireTimer, this, &AThreatActor::Fire, TimeToFire, false);
+	}
+}
+
+void AThreatActor::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (DenialMode != EThreatDenial::Exposure)
+	{
+		return;
+	}
+	TickExposure(DeltaSeconds, HasSightlineToTarget());
+}
+
+bool AThreatActor::HasSightlineToTarget() const
+{
+	if (!Target || !Target->GetOwner() || !GetWorld())
+	{
+		return false;
+	}
+
+	const AActor* TargetOwner = Target->GetOwner();
+	const FVector Start = GetActorLocation();
+	const FVector End = TargetOwner->GetActorLocation();
+
+	if (FVector::Dist(Start, End) > ExposureRange)
+	{
+		return false;
+	}
+
+	// Ignore this threat and the companion itself - what this checks is whether
+	// anything else (a wall, terrain, the bike's own bulk) sits between them, not
+	// whether the trace's own endpoints block it.
+	FCollisionQueryParams Params;
+	Params.AddIgnoredActor(this);
+	Params.AddIgnoredActor(TargetOwner);
+
+	FHitResult Hit;
+	const bool bBlocked = GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Params);
+	return !bBlocked;
 }
 
 void AThreatActor::Deny()
@@ -70,5 +119,27 @@ void AThreatActor::Fire()
 	if (GetWorld())
 	{
 		Destroy();
+	}
+}
+
+void AThreatActor::TickExposure(float DeltaSeconds, bool bHasSightline)
+{
+	if (bDenied || bFired)
+	{
+		return;
+	}
+
+	if (bHasSightline)
+	{
+		ExposureTime += DeltaSeconds;
+		if (ExposureTime >= TimeToFire)
+		{
+			Fire();
+		}
+	}
+	else
+	{
+		// A clean break resets to zero rather than pausing - see EThreatDenial::Exposure.
+		ExposureTime = 0.0f;
 	}
 }

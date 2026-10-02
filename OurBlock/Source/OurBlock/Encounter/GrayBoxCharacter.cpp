@@ -186,7 +186,14 @@ void AGrayBoxCharacter::Look(const FInputActionValue& Value)
 {
 	const FVector2D LookVec = Value.Get<FVector2D>();
 	AddControllerYawInput(LookVec.X);
-	AddControllerPitchInput(LookVec.Y);
+
+	// EKeys::Mouse2D's Y component is raw screen-space delta (down-positive), not
+	// pre-flipped the way the legacy "MouseY" axis was - feeding it straight into
+	// pitch input pitched the camera down when the mouse moved up. Standard UE
+	// templates fix this with a Negate input modifier on the Y axis; this project's
+	// input actions are built in C++ with no modifiers (see the constructor), so
+	// that flip has to happen here instead. Confirmed by playtest, not assumption.
+	AddControllerPitchInput(-LookVec.Y);
 }
 
 void AGrayBoxCharacter::Fire(const FInputActionValue&)

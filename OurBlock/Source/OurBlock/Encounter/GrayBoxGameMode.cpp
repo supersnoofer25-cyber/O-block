@@ -2,7 +2,11 @@
 #include "GrayBoxCharacter.h"
 #include "GrayBoxHUD.h"
 #include "DirtBike.h"
+#include "CompanionStandIn.h"
+#include "ThreatActor.h"
+#include "DangerTallyComponent.h"
 #include "GameFramework/PlayerController.h"
+#include "EngineUtils.h"
 #include "../OurBlock.h"
 
 AGrayBoxGameMode::AGrayBoxGameMode()
@@ -47,12 +51,13 @@ void AGrayBoxGameMode::SpawnTheOtherSeatOccupant(APlayerController* PlayerContro
 
 		FActorSpawnParameters Params;
 		Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		AGrayBoxCharacter* Passenger =
-			GetWorld()->SpawnActor<AGrayBoxCharacter>(AGrayBoxCharacter::StaticClass(), Bike->GetActorTransform(), Params);
+		ACompanionStandIn* Passenger =
+			GetWorld()->SpawnActor<ACompanionStandIn>(ACompanionStandIn::StaticClass(), Bike->GetActorTransform(), Params);
 		if (Passenger)
 		{
 			Passenger->AttachToBikeSeat(Bike);
-			UE_LOG(LogOurBlock, Log, TEXT("SpawnTheOtherSeatOccupant: placeholder passenger attached"));
+			UE_LOG(LogOurBlock, Log, TEXT("SpawnTheOtherSeatOccupant: companion stand-in attached to back seat"));
+			WireUnaimedExposureThreats(Passenger);
 		}
 	}
 	else
@@ -74,4 +79,24 @@ void AGrayBoxGameMode::SpawnTheOtherSeatOccupant(APlayerController* PlayerContro
 			UE_LOG(LogOurBlock, Log, TEXT("SpawnTheOtherSeatOccupant: player attached to placeholder-driven bike"));
 		}
 	}
+}
+
+void AGrayBoxGameMode::WireUnaimedExposureThreats(ACompanionStandIn* Companion)
+{
+	if (!Companion || !GetWorld())
+	{
+		return;
+	}
+
+	int32 Count = 0;
+	for (TActorIterator<AThreatActor> It(GetWorld()); It; ++It)
+	{
+		AThreatActor* Threat = *It;
+		if (Threat->DenialMode == EThreatDenial::Exposure && !Threat->Target)
+		{
+			Threat->Target = Companion->Tally;
+			++Count;
+		}
+	}
+	UE_LOG(LogOurBlock, Log, TEXT("WireUnaimedExposureThreats: wired %d threat(s) to the companion on the back"), Count);
 }

@@ -20,18 +20,27 @@ public:
 	AGrayBoxGameMode();
 
 	// ADR 0004's per-bip seat choice, as a config toggle rather than a menu - there's
-	// no prep screen to choose it from yet. false (on the back, shooting) is the
-	// configuration already playtested; true (riding) exercises the half of ADR 0015
-	// that's never been tested at all, and needs its own pass once this is stable.
+	// no prep screen to choose it from yet. false (on the back, shooting) was the
+	// configuration playtested first. Now flipped to true: driving with a companion
+	// returning fire on the back is the half of ADR 0015 that had never been tested
+	// at all, and populate_exposure_test.py's route only makes sense in this mode.
+	// Flip back to false and rebuild to return to the click-to-deny configuration.
 	//
 	// Whichever seat the player doesn't take gets a placeholder occupant, not a real
 	// companion - ADR 0004 itself names companion AI as load-bearing and non-trivial,
 	// and improvising it inside this pass would be exactly the kind of scope creep
-	// this project's whole culture exists to avoid. The placeholder rides along and,
-	// on the passenger side, can still be shot at by nothing (it's not a ThreatActor)
-	// - it exists only to make the seat structure visible and attachable, not to act.
+	// this project's whole culture exists to avoid.
+	//
+	// bPlayerRides == false: the passenger (player) protects a placeholder-driven
+	// bike, so the driver's seat gets a bare AGrayBoxCharacter - nobody's tally is at
+	// stake there, it exists only to make the seat structure visible and attachable.
+	//
+	// bPlayerRides == true: the companion who could be lost is on the back
+	// regardless of which seat that physically is (ADR 0015), so that seat gets
+	// ACompanionStandIn - the tally-holding placeholder, not a character - so
+	// AThreatActor has something real to target in EThreatDenial::Exposure mode.
 	UPROPERTY(EditAnywhere, Category = "Encounter")
-	bool bPlayerRides = false;
+	bool bPlayerRides = true;
 
 protected:
 	virtual UClass* GetDefaultPawnClassForController_Implementation(AController* InController) override;
@@ -39,4 +48,11 @@ protected:
 
 private:
 	void SpawnTheOtherSeatOccupant(APlayerController* PlayerController);
+
+	// Exposure-mode threats can't have their Target wired up at level-edit time -
+	// the companion they're aimed at doesn't exist until this GameMode spawns it on
+	// the bike (SpawnTheOtherSeatOccupant), unlike the Aimed seat's companion, which
+	// is a persistent level actor a Python script can reference directly. Called
+	// once that companion exists; wires any Exposure threat left with no Target.
+	void WireUnaimedExposureThreats(class ACompanionStandIn* Companion);
 };
