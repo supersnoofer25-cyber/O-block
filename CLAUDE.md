@@ -251,10 +251,14 @@ tuning number, which needs an engine to test (see below).
   could break a sightline — route couldn't. Cover now exists (see the cover entry
   below).
 
-  **First play of the riding seat**: the bike now drives (W/S throttle and brake, A/D
-  steer — steering only works while rolling, on purpose, and a human confirmed that
-  feels right). The exposure threats' mechanics are now verified by the scripted drive
-  (below), but how they feel hasn't been judged yet.
+  **First play of the riding seat**: the bike now drives. W is throttle; S brakes
+  while moving forward and, once stopped, reverses (up to a third of top speed) — one
+  key for both, like most driving games; a human noticed and said it's fine for now.
+  A/D steer, only while rolling, on purpose — also confirmed by a human as feeling
+  right. The exposure threats' mechanics are verified by the scripted drive (below).
+  Played again once cover existed: the human's verdict was "looks fine". That says it
+  works, not yet whether it's *tense* — whether the walls actually changed how they
+  drove is still the open question.
 
   **Gotcha hit getting it to drive** — another one with no error message pointing at
   the cause: on first play nothing responded at all, which looked like broken input.
