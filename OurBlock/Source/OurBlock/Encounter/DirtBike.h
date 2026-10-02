@@ -57,6 +57,20 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Bike")
 	USceneComponent* GetSeatComponent(EBikeSeat Seat) const;
 
+	// For AScriptedDrive only: sets the same held-key flags the input bindings set, so
+	// a scripted run exercises exactly the movement code a player does - Tick can't
+	// tell the difference. Not for gameplay; a real companion driving (bPlayerRides
+	// == false) is ADR 0004's own unbuilt AI work, not this.
+	void SetHeldInputs(bool bAccelerate, bool bBrake, bool bTurnLeft, bool bTurnRight)
+	{
+		bAccelerateHeld = bAccelerate;
+		bBrakeHeld = bBrake;
+		bTurnLeftHeld = bTurnLeft;
+		bTurnRightHeld = bTurnRight;
+	}
+
+	float GetCurrentSpeed() const { return CurrentSpeed; }
+
 protected:
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;

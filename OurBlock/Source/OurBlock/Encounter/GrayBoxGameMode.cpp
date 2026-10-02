@@ -5,6 +5,8 @@
 #include "CompanionStandIn.h"
 #include "ThreatActor.h"
 #include "DangerTallyComponent.h"
+#include "ScriptedDrive.h"
+#include "Misc/CommandLine.h"
 #include "GameFramework/PlayerController.h"
 #include "EngineUtils.h"
 #include "../OurBlock.h"
@@ -58,6 +60,18 @@ void AGrayBoxGameMode::SpawnTheOtherSeatOccupant(APlayerController* PlayerContro
 			Passenger->AttachToBikeSeat(Bike);
 			UE_LOG(LogOurBlock, Log, TEXT("SpawnTheOtherSeatOccupant: companion stand-in attached to back seat"));
 			WireUnaimedExposureThreats(Passenger);
+
+			// Dev harness only - see AScriptedDrive. Absent the command-line flag,
+			// normal play never spawns it.
+			FString ScriptedDriveMode;
+			if (FParse::Value(FCommandLine::Get(), TEXT("ScriptedDrive="), ScriptedDriveMode))
+			{
+				AScriptedDrive* Drive = GetWorld()->SpawnActor<AScriptedDrive>();
+				if (Drive && !Drive->Start(ScriptedDriveMode, Bike, Passenger->Tally))
+				{
+					Drive->Destroy();
+				}
+			}
 		}
 	}
 	else
