@@ -247,9 +247,9 @@ tuning number, which needs an engine to test (see below).
   range cutoff. Flip `bPlayerRides` back to `false` and rebuild to return to the
   click-to-deny setup.
 
-  **Known gap**: the floor is flat with no cover, so right now only distance can break
-  a sightline — route can't. That makes this a test of the clock, not of the actual
-  "never give it the angle" skill, until there's level geometry to hide behind.
+  **Known gap, since closed**: the floor started flat with no cover, so only distance
+  could break a sightline — route couldn't. Cover now exists (see the cover entry
+  below).
 
   **First play of the riding seat**: the bike now drives (W/S throttle and brake, A/D
   steer — steering only works while rolling, on purpose, and a human confirmed that
@@ -278,28 +278,51 @@ tuning number, which needs an engine to test (see below).
 
   ```
   UnrealEditor-Cmd.exe OurBlock.uproject /Game/Maps/TestLevel -game -nullrhi
-      -unattended -nosplash -benchmark -fps=60 -ScriptedDrive=camp
+      -unattended -nosplash -benchmark -fps=60 -ScriptedDrive=hide
   ```
 
   `-benchmark -fps=60` fixes the timestep so results don't depend on machine speed.
-  The editor must be closed to build it (it's a new class — Live Coding can't add
-  one). All three modes came out as predicted:
-  - `park` (never moves) — 0 of 3 fired; all are out of range of the start.
-  - `camp` (drives in among them and stops) — 3 of 3 fired, each about 5s after it
-    first got the angle; the tally hit the threshold, so the companion would be lost.
-  - `pass` (full speed straight through) — 0 of 3 fired; two clocks got to 1.5s and
-    reset to zero on leaving range.
+  The editor must be closed to rebuild it after changing its class layout (Live Coding
+  can't add or reshape a class). Every mode follows the X=300 lane north — X=0 runs
+  into the click-to-deny cluster's companion cube at the origin — by aiming at a point
+  a fixed distance ahead along the lane; steering at discrete waypoints swung wide at
+  full speed and clipped a wall. Each mode states the count it expects and the
+  `RESULT` line says **PASS** or **FAIL**. A run that got stuck logs `BLOCKED` and can
+  never pass, so a bike that silently sat still can't read as a clean result. The
+  current modes, all passing:
+  - `park` (never moves) — 0 fired; all three are out of range of the start.
+  - `exposed` (stops at (300,600), in the open, in range of one threat) — that one
+    fires after 5s, the other two don't.
+  - `hide` (stops at (300,1900), in range of all three, behind cover from each) — 0
+    fired, every clock stays at zero. This is the one that proves cover breaks a
+    sightline.
+  - `pass` (full speed straight through) — 0 fired.
 
-  So range cutoff, sightline trace, runtime target wiring and reset-on-break all work
-  in the real level, not just in the unit tests. The route takes the X=300 lane on
-  purpose — X=0 runs into the click-to-deny cluster's companion cube at the origin,
-  which stopped the first version dead. It logs a `BLOCKED` warning if it's ever stuck,
-  so a run that silently sat still can't read as a clean result.
+  If a mode starts failing after the level changes, check the per-second status lines
+  before blaming exposure mode — the level may simply have moved under the route.
 
-  **What it found — a design signal, not yet a decision**: at full speed the bike
-  crosses a threat's whole range in about 2.5s, half its 5s fuse. On open ground,
-  keeping moving is always safe; the only way to lose the companion is to stop or
-  circle. That matches the "known gap" above, now with evidence behind it.
+  **What it found before there was cover — a design signal, not yet a decision**: on
+  the flat floor an earlier `camp` mode (stop among them) had all three fire and the
+  tally hit the threshold, while `pass` had two clocks reach 1.5s and reset on leaving
+  range. At full speed the bike crosses a threat's whole range in about 2.5s, half its
+  5s fuse, so on open ground keeping moving was always safe and only stopping was
+  ever punished. That's what the cover below is for.
+
+- **`TestLevel` has cover** (`Content/Python/add_cover.py`): three 300-tall walls, one
+  between each exposure threat and part of the X=300 lane, laid out so the scripted
+  drive can check them — (300,1900) is in range of all three threats but hidden from
+  each, and (300,600) is in the open. 300 tall because threats sit at Z=100 and the
+  companion rides at about Z=160; anything lower doesn't reliably break the trace. The
+  walls block the bike too, which is the point: real cover is also something you can
+  crash into. The script removes earlier `Cover*` actors before placing, so re-run it
+  freely after tweaking positions. The layout is deliberately legible rather than
+  clever — the walls only shape the lane; everything off it is open ground, there for
+  a human to find out whether it feels like hiding.
+
+  **Gotcha**: `-ExecutePythonScript` needs an **absolute** path. A relative one
+  resolves against the engine's `Binaries/Win64`, not the project, and fails with
+  "Could not load Python file" — while the editor process still exits 0. The older
+  scripts' header comments show relative paths; they have the same problem.
 
   **Also noticed, not yet fixed**: `AThreatActor::Fire()` puts a red "ThreatActor_N
   fired" debug message on screen. It's gray-box debug output, but it tells the player
@@ -307,14 +330,13 @@ tuning number, which needs an engine to test (see below).
 
 ### The next decision
 
-**Add cover to `TestLevel`, then play the riding seat.** The scripted drive settled
-the mechanics: exposure mode works. It also showed that on the flat floor there's no
-real decision to make — moving is always safe — so playing it as-is would mostly
-confirm that. A few blocks of cover geometry along the route, forcing the player to
-slow down and pick a line, is what turns "keep moving" into "never give it the
-angle". Rerun the scripted drives after adding cover (the route may need new
-waypoints around it), then play. Retune the 5s/1500-unit numbers only after that, if
-it still doesn't feel right. The other thread is unchanged: the "player on the back"
+**Play the riding seat, now that it has cover.** The scripted drives have settled
+everything a script can: exposure mode works, and cover breaks a sightline. What's
+left is the part only a human can judge — whether using the walls feels like hiding,
+whether 5s/1500 units feels tense or trivial, and whether the player can tell
+what's dangerous with no meter (none may ever be added). Expect three walls to be
+thin; if it's inconclusive because there's too little to hide behind, add more cover
+before retuning numbers. Rerun the four scripted drives after any level change. The other thread is unchanged: the "player on the back"
 fuse/threshold still needs tuning by play (spec.md open question 2) — just flip
 `bPlayerRides` back to do it. Don't tune both seats in the same session; one thing to
 judge at a time.
