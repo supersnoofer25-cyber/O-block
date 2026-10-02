@@ -328,9 +328,11 @@ tuning number, which needs an engine to test (see below).
   "Could not load Python file" — while the editor process still exits 0. The older
   scripts' header comments show relative paths; they have the same problem.
 
-  **Also noticed, not yet fixed**: `AThreatActor::Fire()` puts a red "ThreatActor_N
-  fired" debug message on screen. It's gray-box debug output, but it tells the player
-  something the design says they must never see — remove it once debugging is done.
+  **Removed**: `AThreatActor::Fire()` used to put a red "ThreatActor_N fired" debug
+  message on screen — gray-box output, but it told the player every time the hidden
+  tally moved, which the design forbids, and skewed playtests toward judging by text
+  the real game won't show. It now only logs. Don't add on-screen debug text for
+  hidden state back; read the log instead.
 
 ### The next decision
 

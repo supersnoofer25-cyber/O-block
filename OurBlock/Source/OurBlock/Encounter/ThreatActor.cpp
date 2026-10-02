@@ -2,7 +2,6 @@
 #include "DangerTallyComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Engine/StaticMesh.h"
-#include "Engine/Engine.h"
 #include "TimerManager.h"
 #include "../OurBlock.h"
 
@@ -110,11 +109,11 @@ void AThreatActor::Fire()
 		Target->AddDanger(DangerOnFire);
 	}
 
+	// Log only - never on screen. The tally is hidden from the player (ADR 0015), and an
+	// on-screen "fired" message, even a gray-box debug one, told them every time it
+	// moved; it also skewed playtests toward judging by text the real game won't show.
+	// The scripted drive and anyone debugging read this from the log instead.
 	UE_LOG(LogOurBlock, Log, TEXT("%s fired, danger +%d"), *GetName(), DangerOnFire);
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 3.f, FColor::Red, FString::Printf(TEXT("%s fired"), *GetName()));
-	}
 
 	if (GetWorld())
 	{
